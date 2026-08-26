@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PulseBot</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .history li {
+            position: relative;
+        }
+
+        .chat-options-menu {
+            position: absolute;
+            right: 10px;
+            top: 40px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 6px;
+            width: 100px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+
+        .chat-options-menu div {
+            padding: 8px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chat-options-menu div:hover {
+            background-color: #f1f1f1;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 220px 1fr 180px;
+            background-color: #f5f5f5;
+        }
+
+        /* LEFT SIDEBAR */
+
+        .left-sidebar {
+            background-color: white;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        .logo {
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .new-chat {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .history {
+            margin-top: 30px;
+        }
+
+        .history ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .history li {
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* MAIN CHAT */
+
+        main {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            min-width: 0;
+        }
+
+        .chat-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .messages {
+            flex: 1;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            max-width: 70%;
+            width: fit-content;
+            line-height: 1.4;
+        }
+
+        .user-message {
+            margin-left: auto;
+            background-color: #e3f2fd;
+            text-align: right;
+        }
+
+        .bot-message {
+            margin-right: auto;
+            background-color: #eeeeee;
+        }
+
+        .chat-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .chat-form input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .chat-form button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* RIGHT SIDEBAR */
+
+        .right-sidebar {
+            background-color: white;
+            padding: 20px;
+            border-left: 1px solid #ddd;
+        }
+
+        .right-sidebar h3 {
+            margin-top: 0;
+        }
+
+        .profile-btn,
+        .logout-btn,
+        .theme-btn {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        .bot-message p {
+            margin: 0 0 10px 0;
+        }
+
+        .bot-message p:last-child {
+            margin-bottom: 0;
+        }
+
+        .bot-message h1,
+        .bot-message h2,
+        .bot-message h3,
+        .bot-message h4 {
+            margin: 14px 0 8px;
+            line-height: 1.3;
+        }
+
+        .bot-message ul,
+        .bot-message ol {
+            margin: 8px 0 10px;
+            padding-left: 24px;
+        }
+
+        .bot-message li {
+            margin-bottom: 5px;
+        }
+
+        .bot-message strong {
+            font-weight: 700;
+        }
+
+        .bot-message em {
+            font-style: italic;
+        }
+
+        .bot-message code {
+            background: #f1f1f1;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .bot-message pre {
+            margin: 12px 0;
+            padding: 12px;
+            overflow-x: auto;
+            border-radius: 8px;
+            background: #1e1e1e;
+        }
+
+        .bot-message pre code {
+            background: transparent;
+            padding: 0;
+            color: #fff;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .bot-message blockquote {
+            margin: 10px 0;
+            padding-left: 12px;
+            border-left: 3px solid #ccc;
+        }
+
+        .bot-message a {
+            text-decoration: underline;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+</head>
+
+
+<body>
+
+    <!-- LEFT SIDEBAR -->
+
+    <aside class="left-sidebar">
+
+        <h2 class="logo">PulseBot</h2>
+
+        <button class="new-chat">
+            + New Chat
+        </button>
+
+        <div class="history">
+
+            <h3>Chat History</h3>
+
+            <ul>
+
+            </ul>
+            <button class="load-more-btn" style="display: none;">
+                Load More
+            </button>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CHAT AREA -->
+
+    <main>
+
+        <div class="chat-header">
+            <h1>PulseBot</h1>
+        </div>
+
+
+        <section class="messages">
+
+            <!-- Messages will come here later -->
+
+            <div class="message bot-message">
+                Hello! How can I help you?
+            </div>
+
+        </section>
+
+
+        <form class="chat-form">
+
+            <input type="text" placeholder="Ask PulseBot..." name="message">
+
+            <button type="submit">
+                Send
+            </button>
+
+        </form>
+
+    </main>
+
+
+    <!-- RIGHT SIDEBAR -->
+
+    <aside class="right-sidebar">
+
+        <h3>Profile</h3>
+
+        <a href="/user/profile">
+            My Profile
+        </a>
+
+        <button class="logout-btn">
+            Logout
+        </button>
+
+        <hr>
+
+        <button class="theme-btn">
+            🌙 Dark / Light
+        </button>
+
+    </aside>
+
+
+    <script>
+        (async function () {
+            let currentConversationId = null;
+
+            const containerOfChat = document.querySelector(".messages");
+            const historyList = document.querySelector(".history ul");
+            const loadedConversationIds = new Set();
+
+            // Creates one complete history item
+            // with all its event listeners
+            function createHistoryItem(
+                conversationId,
+                title,
+                addToTop = false
+            ) {
+                // Prevent duplicate history items
+                if (loadedConversationIds.has(conversationId)) {
+                    return;
+                }
+
+                loadedConversationIds.add(conversationId);
+
+                const li = document.createElement("li");
+                li.textContent = title;
+                li.dataset.conversationId = conversationId;
+
+                // Three dots button
+                const options = document.createElement("button");
+                options.textContent = "⋮";
+                li.append(options);
+
+                // Three dots listener
+                options.addEventListener("click", (e) => {
+                    e.stopPropagation();
+
+                    const existingMenu =
+                        li.querySelector(".chat-options-menu");
+
+                    if (existingMenu) {
+                        existingMenu.remove();
+                        return;
+                    }
+
+                    const menu = document.createElement("div");
+                    menu.classList.add("chat-options-menu");
+
+                    const rename = document.createElement("div");
+                    rename.textContent = "Rename";
+
+                    const deleteBtn = document.createElement("div");
+                    deleteBtn.textContent = "Delete";
+
+                    menu.append(rename, deleteBtn);
+                    li.append(menu);
+
+                    // DELETE
+                    deleteBtn.addEventListener("click", async (e) => {
+                        e.stopPropagation();
+
+                        const conversationId =
+                            li.dataset.conversationId;
+
+                        try {
+                            const response = await fetch(
+                                `/homepage/conversation/delete/${conversationId}`,
+                                {
+                                    method: "POST"
+                                }
+                            );
+
+                            if (!response.ok) {
+                                throw new Error(
+                                    "Failed to delete conversation"
+                                );
+                            }
+
+                            li.remove();
+                            loadedConversationIds.delete(
+                                conversationId
+                            );
+
+                            if (
+                                currentConversationId ===
+                                conversationId
+                            ) {
+                                currentConversationId = null;
+
+                                containerOfChat.innerHTML = "";
+
+                                const welcomeMsg =
+                                    document.createElement("div");
+
+                                welcomeMsg.classList.add(
+                                    "message",
+                                    "bot-message"
+                                );
+
+                                welcomeMsg.textContent =
+                                    "Hello! How can I help you?";
+
+                                containerOfChat.append(welcomeMsg);
+
+                                window.history.pushState(
+                                    {},
+                                    "",
+                                    "/homepage"
+                                );
+                            }
+                        } catch (error) {
+                            console.error(error);
+
+                            alert(
+                                "Could not delete the conversation. Please try again."
+                            );
+                        }
+                    });
+
+                    // RENAME
+                    rename.addEventListener("click", async (e) => {
+                        e.stopPropagation();
+
+                        const conversationId =
+                            li.dataset.conversationId;
+
+                        const newTitle = prompt(
+                            "Enter new chat name:"
+                        );
+
+                        if (
+                            !newTitle ||
+                            newTitle.trim() === ""
+                        ) {
+                            return;
+                        }
+
+                        try {
+                            const response = await fetch(
+                                `/homepage/conversation/rename/${conversationId}`,
+                                {
+                                    method: "POST",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body: JSON.stringify({
+                                        title: newTitle.trim()
+                                    })
+                                }
+                            );
+
+                            if (!response.ok) {
+                                throw new Error(
+                                    "Failed to rename conversation"
+                                );
+                            }
+
+                            const data =
+                                await response.json();
+
+                            li.firstChild.textContent =
+                                data.title;
+                        } catch (error) {
+                            console.error(error);
+
+                            alert(
+                                "Could not rename the conversation. Please try again."
+                            );
+                        }
+                    });
+                });
+
+                // Open previous conversation
+                li.addEventListener("click", async () => {
+                    const conversationId =
+                        li.dataset.conversationId;
+
+                    try {
+                        const response = await fetch(
+                            `/homepage/conversation/${conversationId}`
+                        );
+
+                        if (!response.ok) {
+                            throw new Error(
+                                "Failed to load conversation"
+                            );
+                        }
+
+                        const conversation =
+                            await response.json();
+
+                        containerOfChat.innerHTML = "";
+
+                        const welcomeMsg =
+                            document.createElement("div");
+
+                        welcomeMsg.classList.add(
+                            "message",
+                            "bot-message"
+                        );
+
+                        welcomeMsg.textContent =
+                            "Hello! How can I help you?";
+
+                        containerOfChat.append(welcomeMsg);
+
+                        for (const message of conversation.messages) {
+                            const msg =
+                                document.createElement("div");
+
+                            msg.classList.add("message");
+
+                            if (message.role === "user") {
+                                msg.classList.add(
+                                    "user-message"
+                                );
+
+                                msg.textContent =
+                                    message.content;
+                            } else {
+                                msg.classList.add(
+                                    "bot-message"
+                                );
+
+                                msg.innerHTML =
+                                    DOMPurify.sanitize(
+                                        marked.parse(
+                                            message.content
+                                        )
+                                    );
+                            }
+
+                            containerOfChat.append(msg);
+                        }
+
+                        currentConversationId =
+                            conversation._id;
+
+                        window.history.pushState(
+                            {},
+                            "",
+                            `?conversation=${conversation._id}`
+                        );
+                    } catch (error) {
+                        console.error(error);
+
+                        alert(
+                            "Could not load the conversation. Please try again."
+                        );
+                    }
+                });
+
+                // New chat should appear at top.
+                // Paginated conversations should append normally.
+                if (addToTop) {
+                    historyList.prepend(li);
+                } else {
+                    historyList.append(li);
+                }
+            }
+
+            // Pagination
+            let currentPage = 1;
+            const limit = 2;
+
+            const loadMoreButton =
+                document.querySelector(".load-more-btn");
+
+            async function getConversations(page = 1) {
+                const response = await fetch(
+                    `/homepage/conversation?page=${page}&limit=${limit}`
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Failed to load conversations"
+                    );
+                }
+
+                const data = await response.json();
+
+                for (const conversation of data.conversations) {
+                    createHistoryItem(
+                        conversation._id,
+                        conversation.title
+                    );
+                }
+
+                currentPage = data.pagination.page;
+
+                if (data.pagination.hasMore) {
+                    loadMoreButton.style.display = "block";
+                } else {
+                    loadMoreButton.style.display = "none";
+                }
+            }
+
+            // Initial conversation history
+            await getConversations();
+
+            // Load More
+            loadMoreButton.addEventListener(
+                "click",
+                async () => {
+                    loadMoreButton.disabled = true;
+
+                    try {
+                        await getConversations(
+                            currentPage + 1
+                        );
+                    } catch (error) {
+                        console.error(
+                            "Load More Error:",
+                            error
+                        );
+                    } finally {
+                        loadMoreButton.disabled = false;
+                    }
+                }
+            );
+
+            // Load conversation from URL
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            const conversationId =
+                params.get("conversation");
+
+            if (conversationId) {
+                const response = await fetch(
+                    `/homepage/conversation/${conversationId}`
+                );
+
+                if (!response.ok) {
+                    // Invalid conversation ID
+                    window.history.pushState(
+                        {},
+                        "",
+                        "/homepage"
+                    );
+
+                    currentConversationId = null;
+                } else {
+                    const conversation =
+                        await response.json();
+
+                    containerOfChat.innerHTML = "";
+
+                    const welcomeMsg =
+                        document.createElement("div");
+
+                    welcomeMsg.classList.add(
+                        "message",
+                        "bot-message"
+                    );
+
+                    welcomeMsg.textContent =
+                        "Hello! How can I help you?";
+
+                    containerOfChat.append(welcomeMsg);
+
+                    for (const message of conversation.messages) {
+                        const msg =
+                            document.createElement("div");
+
+                        msg.classList.add("message");
+
+                        if (message.role === "user") {
+                            msg.classList.add(
+                                "user-message"
+                            );
+
+                            msg.textContent =
+                                message.content;
+                        } else {
+                            msg.classList.add(
+                                "bot-message"
+                            );
+
+                            msg.innerHTML =
+                                DOMPurify.sanitize(
+                                    marked.parse(
+                                        message.content
+                                    )
+                                );
+                        }
+
+                        containerOfChat.append(msg);
+                    }
+
+                    currentConversationId =
+                        conversation._id;
+                }
+            }
+
+            // CHAT FORM
+            const form =
+                document.querySelector(".chat-form");
+
+            const sendButton =
+                form.querySelector("button");
+
+            form.addEventListener(
+                "submit",
+                async (e) => {
+                    e.preventDefault();
+
+                    const messageInput =
+                        document.querySelector(
+                            'input[name="message"]'
+                        );
+
+                    const message =
+                        messageInput.value;
+
+                    messageInput.value = "";
+
+                    if (message.trim() === "") {
+                        return;
+                    }
+
+                    // User message
+                    const userMsg =
+                        document.createElement("div");
+
+                    userMsg.classList.add(
+                        "message",
+                        "user-message"
+                    );
+
+                    userMsg.textContent = message;
+
+                    containerOfChat.append(userMsg);
+
+                    // AI message
+                    const aiMsg =
+                        document.createElement("div");
+
+                    aiMsg.classList.add(
+                        "message",
+                        "bot-message"
+                    );
+
+                    aiMsg.textContent = "";
+
+                    containerOfChat.append(aiMsg);
+
+                    let aiResponse = "";
+
+                    try {
+                        sendButton.disabled = true;
+
+                        const isNewConversation =
+                            currentConversationId === null;
+
+                        const response =
+                            await fetch(
+                                "/homepage/askingai",
+                                {
+                                    method: "POST",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body: JSON.stringify({
+                                        message: message,
+                                        conversationId:
+                                            currentConversationId
+                                    })
+                                }
+                            );
+
+                        if (!response.ok) {
+                            throw new Error(
+                                "AI request failed"
+                            );
+                        }
+
+                        const reader =
+                            response.body.getReader();
+
+                        const decoder =
+                            new TextDecoder();
+
+                        let buffer = "";
+
+                        while (true) {
+                            const {
+                                value,
+                                done
+                            } = await reader.read();
+
+                            if (done) {
+                                break;
+                            }
+
+                            const chunk =
+                                decoder.decode(
+                                    value,
+                                    { stream: true }
+                                );
+
+                            console.log(
+                                "CHUNK ARRIVED:",
+                                chunk
+                            );
+
+                            buffer += chunk;
+
+                            const events =
+                                buffer.split("\n\n");
+
+                            buffer = events.pop();
+
+                            for (const event of events) {
+                                // AI streaming error
+                                if (
+                                    event.startsWith(
+                                        "event: error"
+                                    )
+                                ) {
+                                    const dataLine =
+                                        event
+                                            .split("\n")
+                                            .find(
+                                                (line) =>
+                                                    line.startsWith(
+                                                        "data: "
+                                                    )
+                                            );
+
+                                    if (dataLine) {
+                                        const errorData =
+                                            JSON.parse(
+                                                dataLine.slice(
+                                                    6
+                                                )
+                                            );
+
+                                        aiMsg.textContent =
+                                            errorData.error ||
+                                            "Something went wrong.";
+
+                                        throw new Error(
+                                            errorData.error
+                                        );
+                                    }
+
+                                    continue;
+                                }
+
+                                // Normal SSE data
+                                if (
+                                    !event.startsWith(
+                                        "data: "
+                                    )
+                                ) {
+                                    continue;
+                                }
+
+                                const rawData =
+                                    event.slice(6);
+
+                                // Final event
+                                if (
+                                    rawData.startsWith(
+                                        "{"
+                                    )
+                                ) {
+                                    const finalData =
+                                        JSON.parse(
+                                            rawData
+                                        );
+
+                                    if (
+                                        finalData.done
+                                    ) {
+                                        currentConversationId =
+                                            finalData.conversationId;
+
+                                        if (
+                                            isNewConversation
+                                        ) {
+                                            createHistoryItem(
+                                                finalData.conversationId,
+                                                message,
+                                                true
+                                            );
+
+                                            window.history.pushState(
+                                                {},
+                                                "",
+                                                `?conversation=${finalData.conversationId}`
+                                            );
+                                        }
+                                    }
+                                } else {
+                                    const data =
+                                        JSON.parse(
+                                            rawData
+                                        );
+
+                                    aiResponse += data;
+
+                                    aiMsg.innerHTML =
+                                        DOMPurify.sanitize(
+                                            marked.parse(
+                                                aiResponse
+                                            )
+                                        );
+
+                                    await new Promise(
+                                        (resolve) =>
+                                            requestAnimationFrame(
+                                                resolve
+                                            )
+                                    );
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error(error);
+
+                        aiMsg.textContent =
+                            "Something went wrong. Please try again.";
+                    } finally {
+                        sendButton.disabled = false;
+                    }
+                }
+            );
+
+            // NEW CHAT
+            const createNewChat =
+                document.querySelector(".new-chat");
+
+            createNewChat.addEventListener(
+                "click",
+                () => {
+                    containerOfChat.innerHTML = "";
+
+                    const welcomeMsg =
+                        document.createElement("div");
+
+                    welcomeMsg.classList.add(
+                        "message",
+                        "bot-message"
+                    );
+
+                    welcomeMsg.textContent =
+                        "Hello! How can I help you?";
+
+                    containerOfChat.append(
+                        welcomeMsg
+                    );
+
+                    currentConversationId = null;
+
+                    window.history.pushState(
+                        {},
+                        "",
+                        "/homepage"
+                    );
+                }
+            );
+
+            // Close options menu when clicking outside
+            document.addEventListener(
+                "click",
+                () => {
+                    document
+                        .querySelectorAll(
+                            ".chat-options-menu"
+                        )
+                        .forEach((menu) =>
+                            menu.remove()
+                        );
+                }
+            );
+
+            // LOGOUT
+            const logoutButton =
+                document.querySelector(".logout-btn");
+
+            logoutButton.addEventListener(
+                "click",
+                () => {
+                    window.location.href =
+                        "/user/logout";
+                }
+            );
+        })();
+    </script>
+
+</body>
+
+</html>

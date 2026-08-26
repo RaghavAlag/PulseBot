@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - PulseBot</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #111;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:disabled {
+            background: #eee;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #111;
+            color: white;
+        }
+
+        .section {
+            padding-bottom: 25px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .danger {
+            margin-top: 30px;
+        }
+
+        .danger button {
+            background: #c62828;
+        }
+
+        .message {
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #111;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <a class="back" href="/homepage">
+            ← Back to PulseBot
+        </a>
+
+        <h1>My Profile</h1>
+
+
+        <!-- PROFILE -->
+        <div class="section">
+
+            <h2>Profile Information</h2>
+
+            <form id="profileForm">
+
+                <div class="field">
+                    <label>Name</label>
+
+                    <input type="text" id="name" value="<%= user.name %>" maxlength="50" required>
+                </div>
+
+
+                <div class="field">
+                    <label>Email</label>
+
+                    <input type="email" value="<%= user.email %>" disabled>
+                </div>
+
+
+                <button type="submit">
+                    Save Changes
+                </button>
+
+                <div id="profileMessage" class="message"></div>
+
+            </form>
+
+        </div>
+
+
+        <!-- PASSWORD -->
+        <div class="section">
+
+            <h2>Change Password</h2>
+
+            <form id="passwordForm">
+
+                <div class="field">
+                    <label>
+                        Current Password
+                    </label>
+
+                    <input type="password" id="currentPassword" required>
+                </div>
+
+
+                <div class="field">
+                    <label>
+                        New Password
+                    </label>
+
+                    <input type="password" id="newPassword" minlength="6" maxlength="100" required>
+                </div>
+
+
+                <button type="submit">
+                    Change Password
+                </button>
+
+                <div id="passwordMessage" class="message"></div>
+
+            </form>
+
+        </div>
+
+
+        <!-- DELETE -->
+        <div class="danger">
+
+            <h2>Delete Account</h2>
+
+            <p>
+                This will permanently delete your
+                account and all your conversations.
+            </p>
+
+            <button id="deleteAccount">
+                Delete Account
+            </button>
+
+            <div id="deleteMessage" class="message"></div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // UPDATE PROFILE
+
+        const profileForm =
+            document.getElementById(
+                "profileForm"
+            );
+
+        const profileMessage =
+            document.getElementById(
+                "profileMessage"
+            );
+
+
+        profileForm.addEventListener(
+            "submit",
+            async (e) => {
+
+                e.preventDefault();
+
+                const name =
+                    document.getElementById(
+                        "name"
+                    ).value;
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/user/profile/update",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    name
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+                        profileMessage.textContent =
+                            data.error ||
+                            "Something went wrong";
+
+                        return;
+                    }
+
+
+                    profileMessage.textContent =
+                        "Profile updated successfully.";
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    profileMessage.textContent =
+                        "Something went wrong.";
+                }
+            }
+        );
+
+
+        // CHANGE PASSWORD
+
+        const passwordForm =
+            document.getElementById(
+                "passwordForm"
+            );
+
+        const passwordMessage =
+            document.getElementById(
+                "passwordMessage"
+            );
+
+
+        passwordForm.addEventListener(
+            "submit",
+            async (e) => {
+
+                e.preventDefault();
+
+                const currentPassword =
+                    document.getElementById(
+                        "currentPassword"
+                    ).value;
+
+                const newPassword =
+                    document.getElementById(
+                        "newPassword"
+                    ).value;
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/user/profile/password",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    currentPassword,
+                                    newPassword
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        passwordMessage.textContent =
+                            data.error ||
+                            "Something went wrong";
+
+                        return;
+                    }
+
+
+                    passwordMessage.textContent =
+                        "Password changed successfully.";
+
+                    passwordForm.reset();
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    passwordMessage.textContent =
+                        "Something went wrong.";
+                }
+            }
+        );
+
+
+        // DELETE ACCOUNT
+
+        const deleteAccount =
+            document.getElementById(
+                "deleteAccount"
+            );
+
+        const deleteMessage =
+            document.getElementById(
+                "deleteMessage"
+            );
+
+
+        deleteAccount.addEventListener(
+            "click",
+            async () => {
+
+                const confirmed =
+                    confirm(
+                        "Are you sure you want to permanently delete your account and all conversations?"
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/user/profile/delete",
+                            {
+                                method: "POST"
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        deleteMessage.textContent =
+                            data.error ||
+                            "Something went wrong";
+
+                        return;
+                    }
+
+
+                    window.location.replace("/login");
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    deleteMessage.textContent =
+                        "Something went wrong.";
+                }
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
+const User = require("../models/user")
+const secret = "some-secret";
+const jwt = require("jsonwebtoken")
 
 // define the signup page route
 router.get('/signup', (req, res) => {
