@@ -1,357 +1,554 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>PulseBot</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        .history li {
-            position: relative;
-        }
-
-        .chat-options-menu {
-            position: absolute;
-            right: 10px;
-            top: 40px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 6px;
-            width: 100px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 10;
-        }
-
-        .chat-options-menu div {
-            padding: 8px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .chat-options-menu div:hover {
-            background-color: #f1f1f1;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            display: grid;
-            grid-template-columns: 220px 1fr 180px;
-            background-color: #f5f5f5;
-        }
-
-        /* LEFT SIDEBAR */
-
-        .left-sidebar {
-            background-color: white;
-            padding: 20px;
-            border-right: 1px solid #ddd;
-        }
-
-        .logo {
-            margin-top: 0;
-            margin-bottom: 25px;
-        }
-
-        .new-chat {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .history {
-            margin-top: 30px;
-        }
-
-        .history ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .history li {
-            padding: 10px;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        /* MAIN CHAT */
-
-        main {
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            min-width: 0;
-        }
-
-        .chat-header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .messages {
-            flex: 1;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .message {
-            padding: 10px 14px;
-            margin-bottom: 12px;
-            border-radius: 10px;
-            max-width: 70%;
-            width: fit-content;
-            line-height: 1.4;
-        }
-
-        .user-message {
-            margin-left: auto;
-            background-color: #e3f2fd;
-            text-align: right;
-        }
-
-        .bot-message {
-            margin-right: auto;
-            background-color: #eeeeee;
-        }
-
-        .chat-form {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .chat-form input {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            outline: none;
-        }
-
-        .chat-form button {
-            padding: 12px 18px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        /* RIGHT SIDEBAR */
-
-        .right-sidebar {
-            background-color: white;
-            padding: 20px;
-            border-left: 1px solid #ddd;
-        }
-
-        .right-sidebar h3 {
-            margin-top: 0;
-        }
-
-        .profile-btn,
-        .logout-btn,
-        .theme-btn {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: white;
-        }
-
-        hr {
-            margin: 20px 0;
-            border: none;
-            border-top: 1px solid #ddd;
-        }
-
-        .bot-message p {
-            margin: 0 0 10px 0;
-        }
-
-        .bot-message p:last-child {
-            margin-bottom: 0;
-        }
-
-        .bot-message h1,
-        .bot-message h2,
-        .bot-message h3,
-        .bot-message h4 {
-            margin: 14px 0 8px;
-            line-height: 1.3;
-        }
-
-        .bot-message ul,
-        .bot-message ol {
-            margin: 8px 0 10px;
-            padding-left: 24px;
-        }
-
-        .bot-message li {
-            margin-bottom: 5px;
-        }
-
-        .bot-message strong {
-            font-weight: 700;
-        }
-
-        .bot-message em {
-            font-style: italic;
-        }
-
-        .bot-message code {
-            background: #f1f1f1;
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-
-        .bot-message pre {
-            margin: 12px 0;
-            padding: 12px;
-            overflow-x: auto;
-            border-radius: 8px;
-            background: #1e1e1e;
-        }
-
-        .bot-message pre code {
-            background: transparent;
-            padding: 0;
-            color: #fff;
-            font-size: 0.9em;
-            line-height: 1.5;
-        }
-
-        .bot-message blockquote {
-            margin: 10px 0;
-            padding-left: 12px;
-            border-left: 3px solid #ccc;
-        }
-
-        .bot-message a {
-            text-decoration: underline;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PulseBot — AI Companion</title>
+    <!-- Google Fonts for Oswald display typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/chat.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 </head>
-
-
 <body>
+    <!-- Persistent Master SVG Definitions (Guarantees glowing eyes and lighting across all dynamic states) -->
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+        <defs>
+            <radialGradient id="hAura" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#a068ff" stop-opacity="0.65"/>
+                <stop offset="60%" stop-color="#5a24bf" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#080318" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="hShell" cx="40%" cy="28%" r="72%">
+                <stop offset="0%" stop-color="#432678"/>
+                <stop offset="45%" stop-color="#1f1340"/>
+                <stop offset="85%" stop-color="#0f0822"/>
+                <stop offset="100%" stop-color="#060210"/>
+            </radialGradient>
+            <radialGradient id="hVisor" cx="50%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#1b1233"/>
+                <stop offset="60%" stop-color="#0b0618"/>
+                <stop offset="100%" stop-color="#030108"/>
+            </radialGradient>
+            <radialGradient id="hEye" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="35%" stop-color="#e8ddff"/>
+                <stop offset="70%" stop-color="#a072ff"/>
+                <stop offset="100%" stop-color="#652cd4"/>
+            </radialGradient>
+            <linearGradient id="hEar" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#412473"/>
+                <stop offset="50%" stop-color="#1b0f36"/>
+                <stop offset="100%" stop-color="#0a0518"/>
+            </linearGradient>
+            <radialGradient id="hBeacon" cx="35%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="50%" stop-color="#cfbaff"/>
+                <stop offset="85%" stop-color="#8855ff"/>
+                <stop offset="100%" stop-color="#4a1da8"/>
+            </radialGradient>
+            <filter id="hGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="hEyeBloom" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="glow"/>
+                <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+            </filter>
+        </defs>
+    </svg>
 
-    <!-- LEFT SIDEBAR -->
-
-    <aside class="left-sidebar">
-
-        <h2 class="logo">PulseBot</h2>
-
-        <button class="new-chat">
-            + New Chat
-        </button>
-
-        <div class="history">
-
-            <h3>Chat History</h3>
-
-            <ul>
-
-            </ul>
-            <button class="load-more-btn" style="display: none;">
-                Load More
-            </button>
-        </div>
-
-    </aside>
-
-
-    <!-- MAIN CHAT AREA -->
-
-    <main>
-
-        <div class="chat-header">
-            <h1>PulseBot</h1>
-        </div>
-
-
-        <section class="messages">
-
-            <!-- Messages will come here later -->
-
-            <div class="message bot-message">
-                Hello! How can I help you?
+    <div class="app-container">
+        <!-- LEFT SIDEBAR -->
+        <aside class="left-sidebar" id="sidebar">
+            <!-- Brand Header -->
+            <div class="sidebar-header">
+                <div class="brand-robot-mark">
+                    <svg class="robot-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="80" cy="85" r="72" fill="url(#hAura)"/>
+                        <path d="M80 34 V18" stroke="#4e2c88" stroke-width="4.5" stroke-linecap="round"/>
+                        <circle cx="80" cy="14" r="7.5" fill="url(#hBeacon)" filter="url(#hGlow)"/>
+                        <circle cx="78" cy="12" r="2.2" fill="#ffffff" opacity="0.85"/>
+                        <rect x="14" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                        <ellipse cx="21" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+                        <rect x="132" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                        <ellipse cx="139" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+                        <rect x="23" y="32" width="114" height="96" rx="46" fill="url(#hShell)" stroke="#7e49e6" stroke-width="2.2" filter="url(#hGlow)"/>
+                        <path d="M45 42 C60 36 100 36 115 42" stroke="rgba(215, 195, 255, 0.45)" stroke-width="3" stroke-linecap="round" fill="none"/>
+                        <rect x="33" y="45" width="94" height="72" rx="34" fill="url(#hVisor)" stroke="rgba(140, 85, 250, 0.45)" stroke-width="1.5"/>
+                        <path d="M44 54 C60 48 100 48 116 54" stroke="rgba(255, 255, 255, 0.25)" stroke-width="2" stroke-linecap="round" fill="none"/>
+                        <rect x="53" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                        <rect x="56" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+                        <rect x="95" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                        <rect x="98" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+                        <ellipse cx="48" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)"/>
+                        <ellipse cx="112" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)"/>
+                    </svg>
+                </div>
+                <span class="sidebar-logo">PulseBot</span>
             </div>
 
-        </section>
-
-
-        <form class="chat-form">
-
-            <input type="text" placeholder="Ask PulseBot..." name="message">
-
-            <button type="submit">
-                Send
+            <!-- New Chat Button -->
+            <button class="new-chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>New Chat</span>
             </button>
 
-        </form>
+            <!-- Conversation History List -->
+            <div class="history">
+                <div class="history-title">Recent Conversations</div>
+                <ul></ul>
+                <button class="load-more-btn" style="display: none;">
+                    Load More
+                </button>
+            </div>
 
-    </main>
+            <!-- Sidebar Footer (Profile & Logout) -->
+            <div class="sidebar-footer">
+                <a href="/user/profile" class="sidebar-footer-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>My Profile</span>
+                </a>
+                <button class="logout-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Log Out</span>
+                </button>
+            </div>
+        </aside>
 
+        <!-- MAIN CHAT AREA -->
+        <main>
+            <!-- Subtle Cosmic Starfield & Ambient Glow (Behind Chat Content Only) -->
+            <div class="chat-stars-canvas"></div>
+            <div class="chat-center-aura"></div>
 
-    <!-- RIGHT SIDEBAR -->
+            <!-- Minimal Top Bar -->
+            <header class="chat-topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle Sidebar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <span class="chat-header-title">PulseBot</span>
+                </div>
+                <div class="model-badge">
+                    <span class="status-dot"></span>
+                    <span>Online</span>
+                </div>
+            </header>
 
-    <aside class="right-sidebar">
+            <!-- Scrollable Messages Container -->
+            <section class="messages">
+                <!-- Welcome Hero State (Default when starting new chat) -->
+                <div class="welcome-hero" id="welcomeHero">
+                    <div class="welcome-robot-mark">
+                        <svg class="robot-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="80" cy="85" r="72" fill="url(#hAura)"/>
+                            <path d="M80 34 V18" stroke="#4e2c88" stroke-width="4.5" stroke-linecap="round"/>
+                            <circle cx="80" cy="14" r="7.5" fill="url(#hBeacon)" filter="url(#hGlow)"/>
+                            <circle cx="78" cy="12" r="2.2" fill="#ffffff" opacity="0.85"/>
+                            <rect x="14" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                            <ellipse cx="21" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+                            <rect x="132" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                            <ellipse cx="139" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+                            <rect x="23" y="32" width="114" height="96" rx="46" fill="url(#hShell)" stroke="#7e49e6" stroke-width="2.2" filter="url(#hGlow)"/>
+                            <path d="M45 42 C60 36 100 36 115 42" stroke="rgba(215, 195, 255, 0.45)" stroke-width="3" stroke-linecap="round" fill="none"/>
+                            <rect x="33" y="45" width="94" height="72" rx="34" fill="url(#hVisor)" stroke="rgba(140, 85, 250, 0.45)" stroke-width="1.5"/>
+                            <path d="M44 54 C60 48 100 48 116 54" stroke="rgba(255, 255, 255, 0.25)" stroke-width="2" stroke-linecap="round" fill="none"/>
+                            <rect x="53" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                            <rect x="56" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+                            <rect x="95" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                            <rect x="98" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+                            <ellipse cx="48" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)"/>
+                            <ellipse cx="112" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)"/>
+                        </svg>
+                    </div>
+                    <h2 class="welcome-title">How can I help you today?</h2>
+                    <p class="welcome-subtitle">Ask questions, brainstorm ideas, analyze code, or collaborate on complex tasks with PulseBot.</p>
+                    
+                    <div class="suggestion-grid">
+                        <div class="suggestion-pill" data-prompt="Explain a complex technical concept in simple terms">
+                            <div class="suggestion-pill-header">💡 Explain Concept</div>
+                            <div class="suggestion-pill-desc">Break down a complex idea simply</div>
+                        </div>
+                        <div class="suggestion-pill" data-prompt="Help me write and debug a code snippet">
+                            <div class="suggestion-pill-header">⚡ Code & Debug</div>
+                            <div class="suggestion-pill-desc">Brainstorm or optimize code</div>
+                        </div>
+                        <div class="suggestion-pill" data-prompt="Help me plan a structured project roadmap">
+                            <div class="suggestion-pill-header">📋 Plan Project</div>
+                            <div class="suggestion-pill-desc">Create milestones and action items</div>
+                        </div>
+                        <div class="suggestion-pill" data-prompt="Draft a professional message or summary">
+                            <div class="suggestion-pill-header">✍️ Draft Content</div>
+                            <div class="suggestion-pill-desc">Write an email, post, or outline</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <h3>Profile</h3>
+            <!-- Bottom Message Composer -->
+            <div class="composer-area">
+                <!-- Scroll to Bottom Button -->
+                <button class="scroll-bottom-btn" id="scrollBottomBtn" aria-label="Scroll to bottom">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
 
-        <a href="/user/profile">
-            My Profile
-        </a>
+                <form class="chat-form">
+                    <input type="text" placeholder="Message PulseBot..." name="message" id="chatInput" autocomplete="off">
+                    <button type="submit" id="sendBtn" aria-label="Send message">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </form>
+                <div class="composer-disclaimer">PulseBot may produce inaccurate information. Verify critical details.</div>
+            </div>
+        </main>
+    </div>
 
-        <button class="logout-btn">
-            Logout
-        </button>
+    <!-- Custom Rename Dialog Modal -->
+    <div class="modal-overlay" id="renameModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="renameTitle">
+            <h3 class="modal-title" id="renameTitle">Rename conversation</h3>
+            <p class="modal-description">Enter a new title for this conversation.</p>
+            <input type="text" class="modal-input" id="renameInput" placeholder="Conversation name" autocomplete="off">
+            <div class="modal-error" id="renameError"></div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" id="renameCancelBtn">Cancel</button>
+                <button type="button" class="modal-btn primary" id="renameSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
 
-        <hr>
+    <!-- Custom Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+            <h3 class="modal-title" id="deleteTitle">Delete conversation?</h3>
+            <p class="modal-description">This conversation will be permanently deleted.</p>
+            <div class="modal-error" id="deleteError"></div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" id="deleteCancelBtn">Cancel</button>
+                <button type="button" class="modal-btn danger" id="deleteConfirmBtn">Delete</button>
+            </div>
+        </div>
+    </div>
 
-        <button class="theme-btn">
-            🌙 Dark / Light
-        </button>
-
-    </aside>
-
-
+    <!-- Client-Side Chat Engine & State Management -->
     <script>
         (async function () {
+            if (typeof marked !== "undefined") {
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true
+                });
+            }
+
             let currentConversationId = null;
 
             const containerOfChat = document.querySelector(".messages");
             const historyList = document.querySelector(".history ul");
             const loadedConversationIds = new Set();
+            const sidebar = document.getElementById("sidebar");
+            const menuToggle = document.getElementById("menuToggle");
 
-            // Creates one complete history item
-            // with all its event listeners
-            function createHistoryItem(
-                conversationId,
-                title,
-                addToTop = false
-            ) {
-                // Prevent duplicate history items
+            // Smart Auto-Scroll Management
+            const SCROLL_THRESHOLD = 80;
+            let userShouldAutoScroll = true;
+            const scrollBottomBtn = document.getElementById("scrollBottomBtn");
+
+            function isNearBottom() {
+                return (containerOfChat.scrollHeight - containerOfChat.scrollTop - containerOfChat.clientHeight) <= SCROLL_THRESHOLD;
+            }
+
+            function updateScrollToBottomButton() {
+                if (!scrollBottomBtn) return;
+                const hasMessages = containerOfChat.children.length > 0 && !document.getElementById("welcomeHero");
+                if (hasMessages && !isNearBottom()) {
+                    scrollBottomBtn.classList.add("visible");
+                } else {
+                    scrollBottomBtn.classList.remove("visible");
+                }
+            }
+
+            containerOfChat.addEventListener("scroll", () => {
+                userShouldAutoScroll = isNearBottom();
+                updateScrollToBottomButton();
+            });
+
+            if (scrollBottomBtn) {
+                scrollBottomBtn.addEventListener("click", () => {
+                    userShouldAutoScroll = true;
+                    containerOfChat.scrollTo({
+                        top: containerOfChat.scrollHeight,
+                        behavior: "smooth"
+                    });
+                    scrollBottomBtn.classList.remove("visible");
+                });
+            }
+
+            // Modal elements
+            const renameModal = document.getElementById("renameModal");
+            const renameInput = document.getElementById("renameInput");
+            const renameError = document.getElementById("renameError");
+            const renameCancelBtn = document.getElementById("renameCancelBtn");
+            const renameSaveBtn = document.getElementById("renameSaveBtn");
+
+            const deleteModal = document.getElementById("deleteModal");
+            const deleteError = document.getElementById("deleteError");
+            const deleteCancelBtn = document.getElementById("deleteCancelBtn");
+            const deleteConfirmBtn = document.getElementById("deleteConfirmBtn");
+
+            let activeRenameTarget = null;
+            let activeDeleteTarget = null;
+
+            function openRenameModal(convId, currentTitle, titleSpanElement) {
+                activeRenameTarget = { convId, currentTitle, titleSpanElement };
+                renameInput.value = currentTitle;
+                renameError.textContent = "";
+                renameError.style.display = "none";
+                renameSaveBtn.disabled = false;
+                renameSaveBtn.textContent = "Save";
+                renameModal.classList.add("active");
+                renameModal.setAttribute("aria-hidden", "false");
+                setTimeout(() => {
+                    renameInput.focus();
+                    renameInput.select();
+                }, 50);
+            }
+
+            function closeRenameModal() {
+                renameModal.classList.remove("active");
+                renameModal.setAttribute("aria-hidden", "true");
+                activeRenameTarget = null;
+            }
+
+            renameCancelBtn.addEventListener("click", closeRenameModal);
+            renameModal.addEventListener("click", (e) => {
+                if (e.target === renameModal) closeRenameModal();
+            });
+
+            renameSaveBtn.addEventListener("click", submitRename);
+            renameInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    submitRename();
+                } else if (e.key === "Escape") {
+                    closeRenameModal();
+                }
+            });
+
+            async function submitRename() {
+                if (!activeRenameTarget) return;
+                const newTitle = renameInput.value.trim();
+                if (!newTitle) {
+                    renameError.textContent = "Please enter a chat title.";
+                    renameError.style.display = "block";
+                    return;
+                }
+                if (newTitle === activeRenameTarget.currentTitle) {
+                    closeRenameModal();
+                    return;
+                }
+
+                try {
+                    renameSaveBtn.disabled = true;
+                    renameSaveBtn.textContent = "Saving...";
+
+                    const response = await fetch(`/homepage/conversation/rename/${activeRenameTarget.convId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ title: newTitle })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Failed to rename conversation");
+                    }
+
+                    const data = await response.json();
+                    activeRenameTarget.titleSpanElement.textContent = data.title;
+                    closeRenameModal();
+                } catch (err) {
+                    console.error(err);
+                    renameError.textContent = "Could not rename conversation. Please try again.";
+                    renameError.style.display = "block";
+                } finally {
+                    renameSaveBtn.disabled = false;
+                    renameSaveBtn.textContent = "Save";
+                }
+            }
+
+            function openDeleteModal(convId, liElement) {
+                activeDeleteTarget = { convId, liElement };
+                deleteError.textContent = "";
+                deleteError.style.display = "none";
+                deleteConfirmBtn.disabled = false;
+                deleteConfirmBtn.textContent = "Delete";
+                deleteModal.classList.add("active");
+                deleteModal.setAttribute("aria-hidden", "false");
+            }
+
+            function closeDeleteModal() {
+                deleteModal.classList.remove("active");
+                deleteModal.setAttribute("aria-hidden", "true");
+                activeDeleteTarget = null;
+            }
+
+            deleteCancelBtn.addEventListener("click", closeDeleteModal);
+            deleteModal.addEventListener("click", (e) => {
+                if (e.target === deleteModal) closeDeleteModal();
+            });
+
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    if (renameModal.classList.contains("active")) closeRenameModal();
+                    if (deleteModal.classList.contains("active")) closeDeleteModal();
+                }
+            });
+
+            deleteConfirmBtn.addEventListener("click", async () => {
+                if (!activeDeleteTarget) return;
+                const { convId, liElement } = activeDeleteTarget;
+
+                try {
+                    deleteConfirmBtn.disabled = true;
+                    deleteConfirmBtn.textContent = "Deleting...";
+
+                    const response = await fetch(`/homepage/conversation/delete/${convId}`, {
+                        method: "POST"
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Failed to delete conversation");
+                    }
+
+                    liElement.remove();
+                    loadedConversationIds.delete(convId);
+
+                    if (currentConversationId === convId) {
+                        currentConversationId = null;
+                        renderWelcomeHero();
+                        window.history.pushState({}, "", "/homepage");
+                    }
+
+                    closeDeleteModal();
+                } catch (err) {
+                    console.error(err);
+                    deleteError.textContent = "Could not delete conversation. Please try again.";
+                    deleteError.style.display = "block";
+                    deleteConfirmBtn.disabled = false;
+                    deleteConfirmBtn.textContent = "Delete";
+                }
+            });
+
+            // Mobile sidebar toggle
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle("open");
+                });
+                document.addEventListener("click", (e) => {
+                    if (!sidebar.contains(e.target) && e.target !== menuToggle) {
+                        sidebar.classList.remove("open");
+                    }
+                });
+            }
+
+            // Removes welcome hero when conversation begins
+            function ensureHeroRemoved() {
+                const hero = document.getElementById("welcomeHero");
+                if (hero) {
+                    hero.remove();
+                }
+            }
+
+            // Re-renders welcome hero if conversation is reset
+            function renderWelcomeHero() {
+                containerOfChat.innerHTML = `
+                    <div class="welcome-hero" id="welcomeHero">
+                        <div class="welcome-robot-mark">
+                            <svg class="robot-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="80" cy="85" r="72" fill="url(#hAura)"/>
+                                <path d="M80 34 V18" stroke="#4e2c88" stroke-width="4.5" stroke-linecap="round"/>
+                                <circle cx="80" cy="14" r="7.5" fill="url(#hBeacon)" filter="url(#hGlow)"/>
+                                <circle cx="78" cy="12" r="2.2" fill="#ffffff" opacity="0.85"/>
+                                <rect x="14" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                                <ellipse cx="21" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+                                <rect x="132" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                                <ellipse cx="139" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+                                <rect x="23" y="32" width="114" height="96" rx="46" fill="url(#hShell)" stroke="#7e49e6" stroke-width="2.2" filter="url(#hGlow)"/>
+                                <path d="M45 42 C60 36 100 36 115 42" stroke="rgba(215, 195, 255, 0.45)" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="33" y="45" width="94" height="72" rx="34" fill="url(#hVisor)" stroke="rgba(140, 85, 250, 0.45)" stroke-width="1.5"/>
+                                <path d="M44 54 C60 48 100 48 116 54" stroke="rgba(255, 255, 255, 0.25)" stroke-width="2" stroke-linecap="round" fill="none"/>
+                                <rect x="53" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                                <rect x="56" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+                                <rect x="95" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                                <rect x="98" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+                                <ellipse cx="48" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)"/>
+                                <ellipse cx="112" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)"/>
+                            </svg>
+                        </div>
+                        <h2 class="welcome-title">How can I help you today?</h2>
+                        <p class="welcome-subtitle">Ask questions, brainstorm ideas, analyze code, or collaborate on complex tasks with PulseBot.</p>
+                        <div class="suggestion-grid">
+                            <div class="suggestion-pill" data-prompt="Explain a complex technical concept in simple terms">
+                                <div class="suggestion-pill-header">💡 Explain Concept</div>
+                                <div class="suggestion-pill-desc">Break down a complex idea simply</div>
+                            </div>
+                            <div class="suggestion-pill" data-prompt="Help me write and debug a code snippet">
+                                <div class="suggestion-pill-header">⚡ Code & Debug</div>
+                                <div class="suggestion-pill-desc">Brainstorm or optimize code</div>
+                            </div>
+                            <div class="suggestion-pill" data-prompt="Help me plan a structured project roadmap">
+                                <div class="suggestion-pill-header">📋 Plan Project</div>
+                                <div class="suggestion-pill-desc">Create milestones and action items</div>
+                            </div>
+                            <div class="suggestion-pill" data-prompt="Draft a professional message or summary">
+                                <div class="suggestion-pill-header">✍️ Draft Content</div>
+                                <div class="suggestion-pill-desc">Write an email, post, or outline</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                userShouldAutoScroll = true;
+                updateScrollToBottomButton();
+                bindSuggestionPills();
+            }
+
+            // Quick suggestion pill listener
+            function bindSuggestionPills() {
+                document.querySelectorAll(".suggestion-pill").forEach(pill => {
+                    pill.addEventListener("click", () => {
+                        const input = document.getElementById("chatInput");
+                        if (input) {
+                            input.value = pill.dataset.prompt;
+                            form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+                        }
+                    });
+                });
+            }
+            bindSuggestionPills();
+
+            // Creates one complete history item with all its event listeners
+            function createHistoryItem(conversationId, title, addToTop = false) {
                 if (loadedConversationIds.has(conversationId)) {
                     return;
                 }
@@ -359,238 +556,131 @@
                 loadedConversationIds.add(conversationId);
 
                 const li = document.createElement("li");
-                li.textContent = title;
                 li.dataset.conversationId = conversationId;
 
-                // Three dots button
-                const options = document.createElement("button");
-                options.textContent = "⋮";
-                li.append(options);
+                const titleSpan = document.createElement("span");
+                titleSpan.classList.add("conv-title");
+                titleSpan.textContent = title;
 
-                // Three dots listener
-                options.addEventListener("click", (e) => {
+                // Three dots options button
+                const optionsBtn = document.createElement("button");
+                optionsBtn.classList.add("conv-options-btn");
+                optionsBtn.textContent = "⋮";
+                optionsBtn.setAttribute("aria-label", "Options");
+
+                li.append(titleSpan, optionsBtn);
+
+                // Active highlight
+                if (currentConversationId === conversationId) {
+                    li.classList.add("active");
+                }
+
+                // Three dots listener (Floating Fixed Menu Portal)
+                optionsBtn.addEventListener("click", (e) => {
                     e.stopPropagation();
 
-                    const existingMenu =
-                        li.querySelector(".chat-options-menu");
+                    // Close any existing menus
+                    closeAllMenus();
 
-                    if (existingMenu) {
-                        existingMenu.remove();
-                        return;
-                    }
+                    optionsBtn.classList.add("active");
 
                     const menu = document.createElement("div");
                     menu.classList.add("chat-options-menu");
 
-                    const rename = document.createElement("div");
-                    rename.textContent = "Rename";
+                    const renameBtn = document.createElement("div");
+                    renameBtn.innerHTML = `
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                        <span>Rename</span>
+                    `;
 
                     const deleteBtn = document.createElement("div");
-                    deleteBtn.textContent = "Delete";
+                    deleteBtn.classList.add("delete-opt");
+                    deleteBtn.innerHTML = `
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        <span>Delete</span>
+                    `;
 
-                    menu.append(rename, deleteBtn);
-                    li.append(menu);
+                    menu.append(renameBtn, deleteBtn);
+                    document.body.append(menu);
 
-                    // DELETE
-                    deleteBtn.addEventListener("click", async (e) => {
-                        e.stopPropagation();
+                    // Position fixed right below the button
+                    const rect = optionsBtn.getBoundingClientRect();
+                    let top = rect.bottom + 4;
+                    let left = rect.right - 120;
+                    if (left < 10) left = 10;
+                    if (top + 80 > window.innerHeight) top = rect.top - 76;
 
-                        const conversationId =
-                            li.dataset.conversationId;
+                    menu.style.top = `${top}px`;
+                    menu.style.left = `${left}px`;
 
-                        try {
-                            const response = await fetch(
-                                `/homepage/conversation/delete/${conversationId}`,
-                                {
-                                    method: "POST"
-                                }
-                            );
-
-                            if (!response.ok) {
-                                throw new Error(
-                                    "Failed to delete conversation"
-                                );
-                            }
-
-                            li.remove();
-                            loadedConversationIds.delete(
-                                conversationId
-                            );
-
-                            if (
-                                currentConversationId ===
-                                conversationId
-                            ) {
-                                currentConversationId = null;
-
-                                containerOfChat.innerHTML = "";
-
-                                const welcomeMsg =
-                                    document.createElement("div");
-
-                                welcomeMsg.classList.add(
-                                    "message",
-                                    "bot-message"
-                                );
-
-                                welcomeMsg.textContent =
-                                    "Hello! How can I help you?";
-
-                                containerOfChat.append(welcomeMsg);
-
-                                window.history.pushState(
-                                    {},
-                                    "",
-                                    "/homepage"
-                                );
-                            }
-                        } catch (error) {
-                            console.error(error);
-
-                            alert(
-                                "Could not delete the conversation. Please try again."
-                            );
-                        }
+                    // DELETE (Opens custom modal)
+                    deleteBtn.addEventListener("click", (ev) => {
+                        ev.stopPropagation();
+                        closeAllMenus();
+                        openDeleteModal(li.dataset.conversationId, li);
                     });
 
-                    // RENAME
-                    rename.addEventListener("click", async (e) => {
-                        e.stopPropagation();
-
-                        const conversationId =
-                            li.dataset.conversationId;
-
-                        const newTitle = prompt(
-                            "Enter new chat name:"
-                        );
-
-                        if (
-                            !newTitle ||
-                            newTitle.trim() === ""
-                        ) {
-                            return;
-                        }
-
-                        try {
-                            const response = await fetch(
-                                `/homepage/conversation/rename/${conversationId}`,
-                                {
-                                    method: "POST",
-
-                                    headers: {
-                                        "Content-Type":
-                                            "application/json"
-                                    },
-
-                                    body: JSON.stringify({
-                                        title: newTitle.trim()
-                                    })
-                                }
-                            );
-
-                            if (!response.ok) {
-                                throw new Error(
-                                    "Failed to rename conversation"
-                                );
-                            }
-
-                            const data =
-                                await response.json();
-
-                            li.firstChild.textContent =
-                                data.title;
-                        } catch (error) {
-                            console.error(error);
-
-                            alert(
-                                "Could not rename the conversation. Please try again."
-                            );
-                        }
+                    // RENAME (Opens custom modal)
+                    renameBtn.addEventListener("click", (ev) => {
+                        ev.stopPropagation();
+                        closeAllMenus();
+                        openRenameModal(li.dataset.conversationId, titleSpan.textContent, titleSpan);
                     });
                 });
 
                 // Open previous conversation
                 li.addEventListener("click", async () => {
-                    const conversationId =
-                        li.dataset.conversationId;
+                    const convId = li.dataset.conversationId;
+
+                    // Update active state in sidebar
+                    document.querySelectorAll(".history li").forEach(item => item.classList.remove("active"));
+                    li.classList.add("active");
 
                     try {
-                        const response = await fetch(
-                            `/homepage/conversation/${conversationId}`
-                        );
-
+                        const response = await fetch(`/homepage/conversation/${convId}`);
                         if (!response.ok) {
-                            throw new Error(
-                                "Failed to load conversation"
-                            );
+                            throw new Error("Failed to load conversation");
                         }
 
-                        const conversation =
-                            await response.json();
-
+                        const conversation = await response.json();
                         containerOfChat.innerHTML = "";
 
-                        const welcomeMsg =
-                            document.createElement("div");
-
-                        welcomeMsg.classList.add(
-                            "message",
-                            "bot-message"
-                        );
-
-                        welcomeMsg.textContent =
-                            "Hello! How can I help you?";
-
-                        containerOfChat.append(welcomeMsg);
-
                         for (const message of conversation.messages) {
-                            const msg =
-                                document.createElement("div");
-
+                            const msg = document.createElement("div");
                             msg.classList.add("message");
 
                             if (message.role === "user") {
-                                msg.classList.add(
-                                    "user-message"
-                                );
-
-                                msg.textContent =
-                                    message.content;
+                                msg.classList.add("user-message");
+                                msg.textContent = message.content;
                             } else {
-                                msg.classList.add(
-                                    "bot-message"
-                                );
-
-                                msg.innerHTML =
-                                    DOMPurify.sanitize(
-                                        marked.parse(
-                                            message.content
-                                        )
-                                    );
+                                msg.classList.add("bot-message");
+                                msg.innerHTML = DOMPurify.sanitize(marked.parse(message.content));
                             }
 
                             containerOfChat.append(msg);
                         }
 
-                        currentConversationId =
-                            conversation._id;
+                        containerOfChat.scrollTop = containerOfChat.scrollHeight;
+                        userShouldAutoScroll = true;
+                        updateScrollToBottomButton();
+                        currentConversationId = conversation._id;
+                        window.history.pushState({}, "", `?conversation=${conversation._id}`);
 
-                        window.history.pushState(
-                            {},
-                            "",
-                            `?conversation=${conversation._id}`
-                        );
+                        if (sidebar) {
+                            sidebar.classList.remove("open");
+                        }
                     } catch (error) {
                         console.error(error);
-
-                        alert(
-                            "Could not load the conversation. Please try again."
-                        );
+                        showToast("Could not load conversation. Please try again.");
                     }
                 });
 
-                // New chat should appear at top.
-                // Paginated conversations should append normally.
                 if (addToTop) {
                     historyList.prepend(li);
                 } else {
@@ -598,37 +688,49 @@
                 }
             }
 
+            function showToast(msg) {
+                document.querySelectorAll(".pulsebot-toast").forEach(t => t.remove());
+                const toast = document.createElement("div");
+                toast.className = "pulsebot-toast";
+                toast.textContent = msg;
+                document.body.append(toast);
+                setTimeout(() => toast.classList.add("show"), 10);
+                setTimeout(() => {
+                    toast.classList.remove("show");
+                    setTimeout(() => toast.remove(), 300);
+                }, 3500);
+            }
+
+            function closeAllMenus() {
+                document.querySelectorAll(".chat-options-menu").forEach(menu => menu.remove());
+                document.querySelectorAll(".conv-options-btn").forEach(btn => btn.classList.remove("active"));
+            }
+
+            // Close options menu on outside click, history scroll, or window resize
+            document.addEventListener("click", closeAllMenus);
+            historyList.addEventListener("scroll", closeAllMenus);
+            window.addEventListener("resize", closeAllMenus);
+
             // Pagination
             let currentPage = 1;
-            const limit = 2;
-
-            const loadMoreButton =
-                document.querySelector(".load-more-btn");
+            const limit = 20;
+            const loadMoreButton = document.querySelector(".load-more-btn");
 
             async function getConversations(page = 1) {
-                const response = await fetch(
-                    `/homepage/conversation?page=${page}&limit=${limit}`
-                );
-
+                const response = await fetch(`/homepage/conversation?page=${page}&limit=${limit}`);
                 if (!response.ok) {
-                    throw new Error(
-                        "Failed to load conversations"
-                    );
+                    throw new Error("Failed to load conversations");
                 }
 
                 const data = await response.json();
-
                 for (const conversation of data.conversations) {
-                    createHistoryItem(
-                        conversation._id,
-                        conversation.title
-                    );
+                    createHistoryItem(conversation._id, conversation.title);
                 }
 
                 currentPage = data.pagination.page;
-
                 if (data.pagination.hasMore) {
                     loadMoreButton.style.display = "block";
+                    loadMoreButton.textContent = "Load More";
                 } else {
                     loadMoreButton.style.display = "none";
                 }
@@ -638,402 +740,201 @@
             await getConversations();
 
             // Load More
-            loadMoreButton.addEventListener(
-                "click",
-                async () => {
-                    loadMoreButton.disabled = true;
-
-                    try {
-                        await getConversations(
-                            currentPage + 1
-                        );
-                    } catch (error) {
-                        console.error(
-                            "Load More Error:",
-                            error
-                        );
-                    } finally {
-                        loadMoreButton.disabled = false;
-                    }
+            loadMoreButton.addEventListener("click", async () => {
+                loadMoreButton.disabled = true;
+                loadMoreButton.textContent = "Loading...";
+                try {
+                    await getConversations(currentPage + 1);
+                } catch (error) {
+                    console.error("Load More Error:", error);
+                } finally {
+                    loadMoreButton.disabled = false;
                 }
-            );
+            });
 
-            // Load conversation from URL
-            const params =
-                new URLSearchParams(
-                    window.location.search
-                );
+            // Load conversation from URL if present
+            const params = new URLSearchParams(window.location.search);
+            const conversationIdParam = params.get("conversation");
 
-            const conversationId =
-                params.get("conversation");
-
-            if (conversationId) {
-                const response = await fetch(
-                    `/homepage/conversation/${conversationId}`
-                );
-
+            if (conversationIdParam) {
+                const response = await fetch(`/homepage/conversation/${conversationIdParam}`);
                 if (!response.ok) {
-                    // Invalid conversation ID
-                    window.history.pushState(
-                        {},
-                        "",
-                        "/homepage"
-                    );
-
+                    window.history.pushState({}, "", "/homepage");
                     currentConversationId = null;
                 } else {
-                    const conversation =
-                        await response.json();
-
+                    const conversation = await response.json();
                     containerOfChat.innerHTML = "";
 
-                    const welcomeMsg =
-                        document.createElement("div");
-
-                    welcomeMsg.classList.add(
-                        "message",
-                        "bot-message"
-                    );
-
-                    welcomeMsg.textContent =
-                        "Hello! How can I help you?";
-
-                    containerOfChat.append(welcomeMsg);
-
                     for (const message of conversation.messages) {
-                        const msg =
-                            document.createElement("div");
-
+                        const msg = document.createElement("div");
                         msg.classList.add("message");
 
                         if (message.role === "user") {
-                            msg.classList.add(
-                                "user-message"
-                            );
-
-                            msg.textContent =
-                                message.content;
+                            msg.classList.add("user-message");
+                            msg.textContent = message.content;
                         } else {
-                            msg.classList.add(
-                                "bot-message"
-                            );
-
-                            msg.innerHTML =
-                                DOMPurify.sanitize(
-                                    marked.parse(
-                                        message.content
-                                    )
-                                );
+                            msg.classList.add("bot-message");
+                            msg.innerHTML = DOMPurify.sanitize(marked.parse(message.content));
                         }
 
                         containerOfChat.append(msg);
                     }
 
-                    currentConversationId =
-                        conversation._id;
+                    containerOfChat.scrollTop = containerOfChat.scrollHeight;
+                    userShouldAutoScroll = true;
+                    updateScrollToBottomButton();
+                    currentConversationId = conversation._id;
+
+                    // Highlight active in sidebar
+                    document.querySelectorAll(".history li").forEach(item => {
+                        if (item.dataset.conversationId === conversation._id) {
+                            item.classList.add("active");
+                        }
+                    });
                 }
             }
 
-            // CHAT FORM
-            const form =
-                document.querySelector(".chat-form");
+            // CHAT FORM SUBMISSION
+            const form = document.querySelector(".chat-form");
+            const sendButton = form.querySelector("button");
+            const messageInput = form.querySelector('input[name="message"]');
 
-            const sendButton =
-                form.querySelector("button");
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
 
-            form.addEventListener(
-                "submit",
-                async (e) => {
-                    e.preventDefault();
+                const message = messageInput.value;
+                messageInput.value = "";
 
-                    const messageInput =
-                        document.querySelector(
-                            'input[name="message"]'
-                        );
-
-                    const message =
-                        messageInput.value;
-
-                    messageInput.value = "";
-
-                    if (message.trim() === "") {
-                        return;
-                    }
-
-                    // User message
-                    const userMsg =
-                        document.createElement("div");
-
-                    userMsg.classList.add(
-                        "message",
-                        "user-message"
-                    );
-
-                    userMsg.textContent = message;
-
-                    containerOfChat.append(userMsg);
-
-                    // AI message
-                    const aiMsg =
-                        document.createElement("div");
-
-                    aiMsg.classList.add(
-                        "message",
-                        "bot-message"
-                    );
-
-                    aiMsg.textContent = "";
-
-                    containerOfChat.append(aiMsg);
-
-                    let aiResponse = "";
-
-                    try {
-                        sendButton.disabled = true;
-
-                        const isNewConversation =
-                            currentConversationId === null;
-
-                        const response =
-                            await fetch(
-                                "/homepage/askingai",
-                                {
-                                    method: "POST",
-
-                                    headers: {
-                                        "Content-Type":
-                                            "application/json"
-                                    },
-
-                                    body: JSON.stringify({
-                                        message: message,
-                                        conversationId:
-                                            currentConversationId
-                                    })
-                                }
-                            );
-
-                        if (!response.ok) {
-                            throw new Error(
-                                "AI request failed"
-                            );
-                        }
-
-                        const reader =
-                            response.body.getReader();
-
-                        const decoder =
-                            new TextDecoder();
-
-                        let buffer = "";
-
-                        while (true) {
-                            const {
-                                value,
-                                done
-                            } = await reader.read();
-
-                            if (done) {
-                                break;
-                            }
-
-                            const chunk =
-                                decoder.decode(
-                                    value,
-                                    { stream: true }
-                                );
-
-                            console.log(
-                                "CHUNK ARRIVED:",
-                                chunk
-                            );
-
-                            buffer += chunk;
-
-                            const events =
-                                buffer.split("\n\n");
-
-                            buffer = events.pop();
-
-                            for (const event of events) {
-                                // AI streaming error
-                                if (
-                                    event.startsWith(
-                                        "event: error"
-                                    )
-                                ) {
-                                    const dataLine =
-                                        event
-                                            .split("\n")
-                                            .find(
-                                                (line) =>
-                                                    line.startsWith(
-                                                        "data: "
-                                                    )
-                                            );
-
-                                    if (dataLine) {
-                                        const errorData =
-                                            JSON.parse(
-                                                dataLine.slice(
-                                                    6
-                                                )
-                                            );
-
-                                        aiMsg.textContent =
-                                            errorData.error ||
-                                            "Something went wrong.";
-
-                                        throw new Error(
-                                            errorData.error
-                                        );
-                                    }
-
-                                    continue;
-                                }
-
-                                // Normal SSE data
-                                if (
-                                    !event.startsWith(
-                                        "data: "
-                                    )
-                                ) {
-                                    continue;
-                                }
-
-                                const rawData =
-                                    event.slice(6);
-
-                                // Final event
-                                if (
-                                    rawData.startsWith(
-                                        "{"
-                                    )
-                                ) {
-                                    const finalData =
-                                        JSON.parse(
-                                            rawData
-                                        );
-
-                                    if (
-                                        finalData.done
-                                    ) {
-                                        currentConversationId =
-                                            finalData.conversationId;
-
-                                        if (
-                                            isNewConversation
-                                        ) {
-                                            createHistoryItem(
-                                                finalData.conversationId,
-                                                message,
-                                                true
-                                            );
-
-                                            window.history.pushState(
-                                                {},
-                                                "",
-                                                `?conversation=${finalData.conversationId}`
-                                            );
-                                        }
-                                    }
-                                } else {
-                                    const data =
-                                        JSON.parse(
-                                            rawData
-                                        );
-
-                                    aiResponse += data;
-
-                                    aiMsg.innerHTML =
-                                        DOMPurify.sanitize(
-                                            marked.parse(
-                                                aiResponse
-                                            )
-                                        );
-
-                                    await new Promise(
-                                        (resolve) =>
-                                            requestAnimationFrame(
-                                                resolve
-                                            )
-                                    );
-                                }
-                            }
-                        }
-                    } catch (error) {
-                        console.error(error);
-
-                        aiMsg.textContent =
-                            "Something went wrong. Please try again.";
-                    } finally {
-                        sendButton.disabled = false;
-                    }
+                if (message.trim() === "") {
+                    return;
                 }
-            );
+
+                ensureHeroRemoved();
+
+                // User message
+                const userMsg = document.createElement("div");
+                userMsg.classList.add("message", "user-message");
+                userMsg.textContent = message;
+                containerOfChat.append(userMsg);
+
+                // AI message
+                const aiMsg = document.createElement("div");
+                aiMsg.classList.add("message", "bot-message");
+                aiMsg.textContent = "● ● ●";
+                containerOfChat.append(aiMsg);
+
+                userShouldAutoScroll = true;
+                containerOfChat.scrollTop = containerOfChat.scrollHeight;
+                updateScrollToBottomButton();
+
+                let aiResponse = "";
+
+                try {
+                    sendButton.disabled = true;
+                    const isNewConversation = currentConversationId === null;
+
+                    const response = await fetch("/homepage/askingai", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            message: message,
+                            conversationId: currentConversationId
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("AI request failed");
+                    }
+
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let buffer = "";
+
+                    while (true) {
+                        const { value, done } = await reader.read();
+                        if (done) break;
+
+                        const chunk = decoder.decode(value, { stream: true });
+                        buffer += chunk;
+
+                        const events = buffer.split("\n\n");
+                        buffer = events.pop();
+
+                        for (const event of events) {
+                            if (event.startsWith("event: error")) {
+                                const dataLine = event.split("\n").find(line => line.startsWith("data: "));
+                                if (dataLine) {
+                                    const errorData = JSON.parse(dataLine.slice(6));
+                                    aiMsg.textContent = errorData.error || "Something went wrong.";
+                                    throw new Error(errorData.error);
+                                }
+                                continue;
+                            }
+
+                            if (!event.startsWith("data: ")) {
+                                continue;
+                            }
+
+                            const rawData = event.slice(6);
+
+                            if (rawData.startsWith("{")) {
+                                const finalData = JSON.parse(rawData);
+                                if (finalData.done) {
+                                    currentConversationId = finalData.conversationId;
+
+                                    if (isNewConversation) {
+                                        createHistoryItem(finalData.conversationId, message, true);
+                                        window.history.pushState({}, "", `?conversation=${finalData.conversationId}`);
+                                    }
+                                }
+                            } else {
+                                const data = JSON.parse(rawData);
+                                aiResponse += data;
+                                aiMsg.innerHTML = DOMPurify.sanitize(marked.parse(aiResponse));
+
+                                if (userShouldAutoScroll) {
+                                    containerOfChat.scrollTop = containerOfChat.scrollHeight;
+                                }
+                                updateScrollToBottomButton();
+
+                                await new Promise(resolve => requestAnimationFrame(resolve));
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                    aiMsg.textContent = "Something went wrong. Please try again.";
+                } finally {
+                    sendButton.disabled = false;
+                    if (userShouldAutoScroll) {
+                        containerOfChat.scrollTop = containerOfChat.scrollHeight;
+                    }
+                    updateScrollToBottomButton();
+                }
+            });
 
             // NEW CHAT
-            const createNewChat =
-                document.querySelector(".new-chat");
-
-            createNewChat.addEventListener(
-                "click",
-                () => {
-                    containerOfChat.innerHTML = "";
-
-                    const welcomeMsg =
-                        document.createElement("div");
-
-                    welcomeMsg.classList.add(
-                        "message",
-                        "bot-message"
-                    );
-
-                    welcomeMsg.textContent =
-                        "Hello! How can I help you?";
-
-                    containerOfChat.append(
-                        welcomeMsg
-                    );
-
-                    currentConversationId = null;
-
-                    window.history.pushState(
-                        {},
-                        "",
-                        "/homepage"
-                    );
+            const createNewChat = document.querySelector(".new-chat");
+            createNewChat.addEventListener("click", () => {
+                renderWelcomeHero();
+                currentConversationId = null;
+                userShouldAutoScroll = true;
+                updateScrollToBottomButton();
+                document.querySelectorAll(".history li").forEach(item => item.classList.remove("active"));
+                window.history.pushState({}, "", "/homepage");
+                if (sidebar) {
+                    sidebar.classList.remove("open");
                 }
-            );
-
-            // Close options menu when clicking outside
-            document.addEventListener(
-                "click",
-                () => {
-                    document
-                        .querySelectorAll(
-                            ".chat-options-menu"
-                        )
-                        .forEach((menu) =>
-                            menu.remove()
-                        );
-                }
-            );
+            });
 
             // LOGOUT
-            const logoutButton =
-                document.querySelector(".logout-btn");
-
-            logoutButton.addEventListener(
-                "click",
-                () => {
-                    window.location.href =
-                        "/user/logout";
-                }
-            );
+            const logoutButton = document.querySelector(".logout-btn");
+            if (logoutButton) {
+                logoutButton.addEventListener("click", () => {
+                    window.location.href = "/user/logout";
+                });
+            }
         })();
     </script>
-
 </body>
-
 </html>

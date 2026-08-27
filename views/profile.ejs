@@ -3,419 +3,443 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Profile — PulseBot</title>
 
-    <title>My Profile - PulseBot</title>
+    <!-- Google Fonts for Oswald display typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            color: #111;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: 50px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 12px;
-        }
-
-        h1 {
-            margin-top: 0;
-            margin-bottom: 30px;
-        }
-
-        h2 {
-            margin-top: 30px;
-        }
-
-        .field {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 7px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 15px;
-        }
-
-        input:disabled {
-            background: #eee;
-        }
-
-        button {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            background: #111;
-            color: white;
-        }
-
-        .section {
-            padding-bottom: 25px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .danger {
-            margin-top: 30px;
-        }
-
-        .danger button {
-            background: #c62828;
-        }
-
-        .message {
-            margin-top: 12px;
-            font-size: 14px;
-        }
-
-        .back {
-            display: inline-block;
-            margin-bottom: 20px;
-            text-decoration: none;
-            color: #111;
-        }
-    </style>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/profile.css">
 </head>
 
 <body>
+    <!-- Persistent Master SVG Definitions for Brand Mascot -->
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+        <defs>
+            <radialGradient id="hAura" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#a068ff" stop-opacity="0.65" />
+                <stop offset="60%" stop-color="#5a24bf" stop-opacity="0.25" />
+                <stop offset="100%" stop-color="#080318" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="hShell" cx="40%" cy="28%" r="72%">
+                <stop offset="0%" stop-color="#432678" />
+                <stop offset="45%" stop-color="#1f1340" />
+                <stop offset="85%" stop-color="#0f0822" />
+                <stop offset="100%" stop-color="#060210" />
+            </radialGradient>
+            <radialGradient id="hVisor" cx="50%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#1b1233" />
+                <stop offset="60%" stop-color="#0b0618" />
+                <stop offset="100%" stop-color="#030108" />
+            </radialGradient>
+            <radialGradient id="hEye" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="35%" stop-color="#e8ddff" />
+                <stop offset="70%" stop-color="#a072ff" />
+                <stop offset="100%" stop-color="#652cd4" />
+            </radialGradient>
+            <linearGradient id="hEar" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#412473" />
+                <stop offset="50%" stop-color="#1b0f36" />
+                <stop offset="100%" stop-color="#0a0518" />
+            </linearGradient>
+            <radialGradient id="hBeacon" cx="35%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="50%" stop-color="#cfbaff" />
+                <stop offset="85%" stop-color="#8855ff" />
+                <stop offset="100%" stop-color="#4a1da8" />
+            </radialGradient>
+            <filter id="hGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+            <filter id="hEyeBloom" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="glow" />
+                <feComposite in="SourceGraphic" in2="glow" operator="over" />
+            </filter>
+        </defs>
+    </svg>
 
-    <div class="container">
+    <div class="profile-page-container">
+        <!-- Subtle Cosmic Atmosphere -->
+        <div class="profile-stars-canvas"></div>
+        <div class="profile-center-aura"></div>
 
-        <a class="back" href="/homepage">
-            ← Back to PulseBot
-        </a>
+        <!-- Top Navigation Bar -->
+        <nav class="profile-navbar">
+            <a href="/homepage" class="nav-back-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Back to Chat</span>
+            </a>
 
-        <h1>My Profile</h1>
+            <div class="nav-brand">
+                <div class="brand-robot-mark">
+                    <svg class="robot-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="80" cy="85" r="72" fill="url(#hAura)" />
+                        <path d="M80 34 V18" stroke="#4e2c88" stroke-width="4.5" stroke-linecap="round" />
+                        <circle cx="80" cy="14" r="7.5" fill="url(#hBeacon)" filter="url(#hGlow)" />
+                        <circle cx="78" cy="12" r="2.2" fill="#ffffff" opacity="0.85" />
+                        <rect x="14" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)" />
+                        <ellipse cx="21" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1" />
+                        <rect x="132" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)" />
+                        <ellipse cx="139" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1" />
+                        <rect x="23" y="32" width="114" height="96" rx="46" fill="url(#hShell)" stroke="#7e49e6" stroke-width="2.2" filter="url(#hGlow)" />
+                        <path d="M45 42 C60 36 100 36 115 42" stroke="rgba(215, 195, 255, 0.45)" stroke-width="3" stroke-linecap="round" fill="none" />
+                        <rect x="33" y="45" width="94" height="72" rx="34" fill="url(#hVisor)" stroke="rgba(140, 85, 250, 0.45)" stroke-width="1.5" />
+                        <path d="M44 54 C60 48 100 48 116 54" stroke="rgba(255, 255, 255, 0.25)" stroke-width="2" stroke-linecap="round" fill="none" />
+                        <rect x="53" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)" />
+                        <rect x="56" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9" />
+                        <rect x="95" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)" />
+                        <rect x="98" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9" />
+                        <ellipse cx="48" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)" />
+                        <ellipse cx="112" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)" />
+                    </svg>
+                </div>
+                <span class="brand-logo-text">PulseBot</span>
+            </div>
 
+            <a href="/user/logout" class="nav-logout-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Log Out</span>
+            </a>
+        </nav>
 
-        <!-- PROFILE -->
-        <div class="section">
-
-            <h2>Profile Information</h2>
-
-            <form id="profileForm">
-
-                <div class="field">
-                    <label>Name</label>
-
-                    <input type="text" id="name" value="<%= user.name %>" maxlength="50" required>
+        <!-- Main Profile Content -->
+        <main class="profile-content">
+            <div class="profile-card">
+                <!-- User Identity Header -->
+                <div class="user-identity-header">
+                    <div class="user-avatar-badge" id="userAvatar">
+                        <%= (user.name && user.name.length > 0) ? user.name.charAt(0).toUpperCase() : 'U' %>
+                    </div>
+                    <div class="user-info-text">
+                        <h1 class="user-name-title" id="userNameHeader"><%= user.name %></h1>
+                        <p class="user-email-text"><%= user.email %></p>
+                        <span class="user-status-pill">
+                            <span class="user-status-dot"></span>
+                            <span>Active Member</span>
+                        </span>
+                    </div>
                 </div>
 
+                <!-- Section 1: Profile Information -->
+                <section class="profile-section">
+                    <h2 class="section-heading">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>Profile Information</span>
+                    </h2>
 
-                <div class="field">
-                    <label>Email</label>
+                    <form id="profileForm" class="profile-form">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Display Name</label>
+                            <input type="text" id="name" class="form-input" value="<%= user.name %>" maxlength="50" autocomplete="name" required>
+                        </div>
 
-                    <input type="email" value="<%= user.email %>" disabled>
-                </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address</label>
+                            <input type="email" id="email" class="form-input" value="<%= user.email %>" disabled>
+                        </div>
 
+                        <div id="profileMessage" class="form-feedback"></div>
 
-                <button type="submit">
-                    Save Changes
-                </button>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary" id="saveProfileBtn">
+                                <span>Save Changes</span>
+                            </button>
+                        </div>
+                    </form>
+                </section>
 
-                <div id="profileMessage" class="message"></div>
+                <!-- Section 2: Change Password -->
+                <section class="profile-section">
+                    <h2 class="section-heading">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span>Security & Password</span>
+                    </h2>
 
-            </form>
+                    <form id="passwordForm" class="profile-form">
+                        <div class="form-group">
+                            <label class="form-label" for="currentPassword">Current Password</label>
+                            <div class="input-wrapper">
+                                <input type="password" id="currentPassword" class="form-input" autocomplete="current-password" required>
+                                <button type="button" class="toggle-password" data-target="currentPassword" aria-label="Toggle password visibility">
+                                    <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
 
-        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="newPassword">New Password</label>
+                            <div class="input-wrapper">
+                                <input type="password" id="newPassword" class="form-input" minlength="6" maxlength="100" autocomplete="new-password" required>
+                                <button type="button" class="toggle-password" data-target="newPassword" aria-label="Toggle password visibility">
+                                    <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
 
+                        <div id="passwordMessage" class="form-feedback"></div>
 
-        <!-- PASSWORD -->
-        <div class="section">
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary" id="changePasswordBtn">
+                                <span>Change Password</span>
+                            </button>
+                        </div>
+                    </form>
+                </section>
 
-            <h2>Change Password</h2>
+                <!-- Section 3: Danger Zone -->
+                <section class="profile-section danger-section">
+                    <h2 class="section-heading danger-heading">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>Danger Zone</span>
+                    </h2>
 
-            <form id="passwordForm">
+                    <p class="danger-desc">
+                        Permanently delete your account and all associated conversations. This action is irreversible.
+                    </p>
 
-                <div class="field">
-                    <label>
-                        Current Password
-                    </label>
+                    <button type="button" id="deleteAccountBtn" class="btn-danger">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        <span>Delete Account</span>
+                    </button>
 
-                    <input type="password" id="currentPassword" required>
-                </div>
-
-
-                <div class="field">
-                    <label>
-                        New Password
-                    </label>
-
-                    <input type="password" id="newPassword" minlength="6" maxlength="100" required>
-                </div>
-
-
-                <button type="submit">
-                    Change Password
-                </button>
-
-                <div id="passwordMessage" class="message"></div>
-
-            </form>
-
-        </div>
-
-
-        <!-- DELETE -->
-        <div class="danger">
-
-            <h2>Delete Account</h2>
-
-            <p>
-                This will permanently delete your
-                account and all your conversations.
-            </p>
-
-            <button id="deleteAccount">
-                Delete Account
-            </button>
-
-            <div id="deleteMessage" class="message"></div>
-
-        </div>
-
+                    <div id="deleteMessage" class="form-feedback" style="margin-top: 1rem;"></div>
+                </section>
+            </div>
+        </main>
     </div>
 
+    <!-- Custom Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+            <h3 class="modal-title" id="deleteModalTitle">Delete Account?</h3>
+            <p class="modal-description">
+                Are you sure you want to permanently delete your account and all conversations? This action cannot be undone.
+            </p>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" id="deleteCancelBtn">Cancel</button>
+                <button type="button" class="modal-btn danger" id="deleteConfirmBtn">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- Script Logic -->
     <script>
+        (function () {
+            // Password Visibility Toggles
+            document.querySelectorAll(".toggle-password").forEach(button => {
+                button.addEventListener("click", () => {
+                    const targetId = button.getAttribute("data-target");
+                    const input = document.getElementById(targetId);
+                    if (!input) return;
 
-        // UPDATE PROFILE
+                    const isPassword = input.type === "password";
+                    input.type = isPassword ? "text" : "password";
 
-        const profileForm =
-            document.getElementById(
-                "profileForm"
-            );
+                    button.innerHTML = isPassword
+                        ? `<svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>`
+                        : `<svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>`;
+                });
+            });
 
-        const profileMessage =
-            document.getElementById(
-                "profileMessage"
-            );
+            // 1. UPDATE PROFILE
+            const profileForm = document.getElementById("profileForm");
+            const profileMessage = document.getElementById("profileMessage");
+            const saveProfileBtn = document.getElementById("saveProfileBtn");
+            const nameInput = document.getElementById("name");
+            const userNameHeader = document.getElementById("userNameHeader");
+            const userAvatar = document.getElementById("userAvatar");
 
-
-        profileForm.addEventListener(
-            "submit",
-            async (e) => {
-
+            profileForm.addEventListener("submit", async (e) => {
                 e.preventDefault();
-
-                const name =
-                    document.getElementById(
-                        "name"
-                    ).value;
-
+                const name = nameInput.value.trim();
+                if (!name) return;
 
                 try {
+                    saveProfileBtn.disabled = true;
+                    saveProfileBtn.innerHTML = "<span>Saving...</span>";
+                    profileMessage.className = "form-feedback";
+                    profileMessage.style.display = "none";
 
-                    const response =
-                        await fetch(
-                            "/user/profile/update",
-                            {
-                                method: "POST",
+                    const response = await fetch("/user/profile/update", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name })
+                    });
 
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                body: JSON.stringify({
-                                    name
-                                })
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
+                    const data = await response.json();
 
                     if (!response.ok) {
-                        profileMessage.textContent =
-                            data.error ||
-                            "Something went wrong";
-
+                        profileMessage.textContent = data.error || "Something went wrong";
+                        profileMessage.className = "form-feedback error";
+                        profileMessage.style.display = "block";
                         return;
                     }
 
+                    profileMessage.textContent = "Profile updated successfully.";
+                    profileMessage.className = "form-feedback success";
+                    profileMessage.style.display = "block";
 
-                    profileMessage.textContent =
-                        "Profile updated successfully.";
+                    if (userNameHeader) userNameHeader.textContent = name;
+                    if (userAvatar) userAvatar.textContent = name.charAt(0).toUpperCase();
 
                 } catch (error) {
-
                     console.error(error);
-
-                    profileMessage.textContent =
-                        "Something went wrong.";
+                    profileMessage.textContent = "Could not update profile. Please try again.";
+                    profileMessage.className = "form-feedback error";
+                    profileMessage.style.display = "block";
+                } finally {
+                    saveProfileBtn.disabled = false;
+                    saveProfileBtn.innerHTML = "<span>Save Changes</span>";
                 }
-            }
-        );
+            });
 
+            // 2. CHANGE PASSWORD
+            const passwordForm = document.getElementById("passwordForm");
+            const passwordMessage = document.getElementById("passwordMessage");
+            const changePasswordBtn = document.getElementById("changePasswordBtn");
+            const currentPasswordInput = document.getElementById("currentPassword");
+            const newPasswordInput = document.getElementById("newPassword");
 
-        // CHANGE PASSWORD
-
-        const passwordForm =
-            document.getElementById(
-                "passwordForm"
-            );
-
-        const passwordMessage =
-            document.getElementById(
-                "passwordMessage"
-            );
-
-
-        passwordForm.addEventListener(
-            "submit",
-            async (e) => {
-
+            passwordForm.addEventListener("submit", async (e) => {
                 e.preventDefault();
-
-                const currentPassword =
-                    document.getElementById(
-                        "currentPassword"
-                    ).value;
-
-                const newPassword =
-                    document.getElementById(
-                        "newPassword"
-                    ).value;
-
+                const currentPassword = currentPasswordInput.value;
+                const newPassword = newPasswordInput.value;
 
                 try {
+                    changePasswordBtn.disabled = true;
+                    changePasswordBtn.innerHTML = "<span>Updating...</span>";
+                    passwordMessage.className = "form-feedback";
+                    passwordMessage.style.display = "none";
 
-                    const response =
-                        await fetch(
-                            "/user/profile/password",
-                            {
-                                method: "POST",
+                    const response = await fetch("/user/profile/password", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ currentPassword, newPassword })
+                    });
 
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                body: JSON.stringify({
-                                    currentPassword,
-                                    newPassword
-                                })
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
+                    const data = await response.json();
 
                     if (!response.ok) {
-
-                        passwordMessage.textContent =
-                            data.error ||
-                            "Something went wrong";
-
+                        passwordMessage.textContent = data.error || "Something went wrong";
+                        passwordMessage.className = "form-feedback error";
+                        passwordMessage.style.display = "block";
                         return;
                     }
 
-
-                    passwordMessage.textContent =
-                        "Password changed successfully.";
-
+                    passwordMessage.textContent = "Password changed successfully.";
+                    passwordMessage.className = "form-feedback success";
+                    passwordMessage.style.display = "block";
                     passwordForm.reset();
 
                 } catch (error) {
-
                     console.error(error);
-
-                    passwordMessage.textContent =
-                        "Something went wrong.";
+                    passwordMessage.textContent = "Could not change password. Please try again.";
+                    passwordMessage.className = "form-feedback error";
+                    passwordMessage.style.display = "block";
+                } finally {
+                    changePasswordBtn.disabled = false;
+                    changePasswordBtn.innerHTML = "<span>Change Password</span>";
                 }
+            });
+
+            // 3. DELETE ACCOUNT (Custom Modal)
+            const deleteAccountBtn = document.getElementById("deleteAccountBtn");
+            const deleteModal = document.getElementById("deleteModal");
+            const deleteCancelBtn = document.getElementById("deleteCancelBtn");
+            const deleteConfirmBtn = document.getElementById("deleteConfirmBtn");
+            const deleteMessage = document.getElementById("deleteMessage");
+
+            function openDeleteModal() {
+                deleteModal.classList.add("active");
+                deleteModal.setAttribute("aria-hidden", "false");
             }
-        );
 
+            function closeDeleteModal() {
+                deleteModal.classList.remove("active");
+                deleteModal.setAttribute("aria-hidden", "true");
+            }
 
-        // DELETE ACCOUNT
+            deleteAccountBtn.addEventListener("click", openDeleteModal);
+            deleteCancelBtn.addEventListener("click", closeDeleteModal);
 
-        const deleteAccount =
-            document.getElementById(
-                "deleteAccount"
-            );
-
-        const deleteMessage =
-            document.getElementById(
-                "deleteMessage"
-            );
-
-
-        deleteAccount.addEventListener(
-            "click",
-            async () => {
-
-                const confirmed =
-                    confirm(
-                        "Are you sure you want to permanently delete your account and all conversations?"
-                    );
-
-
-                if (!confirmed) {
-                    return;
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" && deleteModal.classList.contains("active")) {
+                    closeDeleteModal();
                 }
+            });
 
-
+            deleteConfirmBtn.addEventListener("click", async () => {
                 try {
+                    deleteConfirmBtn.disabled = true;
+                    deleteConfirmBtn.textContent = "Deleting...";
 
-                    const response =
-                        await fetch(
-                            "/user/profile/delete",
-                            {
-                                method: "POST"
-                            }
-                        );
+                    const response = await fetch("/user/profile/delete", {
+                        method: "POST"
+                    });
 
-
-                    const data =
-                        await response.json();
-
+                    const data = await response.json();
 
                     if (!response.ok) {
-
-                        deleteMessage.textContent =
-                            data.error ||
-                            "Something went wrong";
-
+                        closeDeleteModal();
+                        deleteMessage.textContent = data.error || "Something went wrong";
+                        deleteMessage.className = "form-feedback error";
+                        deleteMessage.style.display = "block";
+                        deleteConfirmBtn.disabled = false;
+                        deleteConfirmBtn.textContent = "Delete Permanently";
                         return;
                     }
-
 
                     window.location.replace("/login");
 
                 } catch (error) {
-
                     console.error(error);
-
-                    deleteMessage.textContent =
-                        "Something went wrong.";
+                    closeDeleteModal();
+                    deleteMessage.textContent = "Could not delete account. Please try again.";
+                    deleteMessage.className = "form-feedback error";
+                    deleteMessage.style.display = "block";
+                    deleteConfirmBtn.disabled = false;
+                    deleteConfirmBtn.textContent = "Delete Permanently";
                 }
-            }
-        );
-
+            });
+        })();
     </script>
-
 </body>
 
 </html>

@@ -2,7 +2,7 @@ require("dotenv").config()
 require("./redis");
 const express = require('express');
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000;
 const static_route = require("./routes/static_route")
 const userSignUp = require("./routes/userSignUp")
 const connectDB = require("./connection");

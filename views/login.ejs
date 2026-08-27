@@ -1,21 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Log In — PulseBot</title>
+    <!-- Google Fonts for Oswald display typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/auth.css">
 </head>
-
 <body>
-    <h1>Login</h1>
-    <form action="/user/login" method="post">
-        <label for="">Email</label>
-        <input type="text" placeholder="example@gmail.com" name="email">
-        <label for="">Password</label>
-        <input type="password" placeholder="Password" name="password">
-        <button>Login</button>
-    </form>
-</body>
+    <div class="auth-container">
+        <!-- Background Ambient Elements -->
+        <div class="stars-canvas"></div>
+        <div class="center-aura"></div>
+        <div class="bg-pulse-ring"></div>
+        <div class="bg-particles">
+            <span class="particle p-1"></span>
+            <span class="particle p-2"></span>
+            <span class="particle p-3"></span>
+            <span class="particle p-4"></span>
+        </div>
 
+        <!-- Central Authentication Card -->
+        <div class="auth-card">
+            <!-- Header Branding -->
+            <div class="auth-header">
+                <div class="brand-robot-mark">
+                    <svg class="robot-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="hAura" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#a068ff" stop-opacity="0.65"/>
+                                <stop offset="60%" stop-color="#5a24bf" stop-opacity="0.25"/>
+                                <stop offset="100%" stop-color="#080318" stop-opacity="0"/>
+                            </radialGradient>
+                            <radialGradient id="hShell" cx="40%" cy="28%" r="72%">
+                                <stop offset="0%" stop-color="#432678"/>
+                                <stop offset="45%" stop-color="#1f1340"/>
+                                <stop offset="85%" stop-color="#0f0822"/>
+                                <stop offset="100%" stop-color="#060210"/>
+                            </radialGradient>
+                            <radialGradient id="hVisor" cx="50%" cy="35%" r="65%">
+                                <stop offset="0%" stop-color="#1b1233"/>
+                                <stop offset="60%" stop-color="#0b0618"/>
+                                <stop offset="100%" stop-color="#030108"/>
+                            </radialGradient>
+                            <radialGradient id="hEye" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="35%" stop-color="#e8ddff"/>
+                                <stop offset="70%" stop-color="#a072ff"/>
+                                <stop offset="100%" stop-color="#652cd4"/>
+                            </radialGradient>
+                            <linearGradient id="hEar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#412473"/>
+                                <stop offset="50%" stop-color="#1b0f36"/>
+                                <stop offset="100%" stop-color="#0a0518"/>
+                            </linearGradient>
+                            <radialGradient id="hBeacon" cx="35%" cy="35%" r="65%">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="50%" stop-color="#cfbaff"/>
+                                <stop offset="85%" stop-color="#8855ff"/>
+                                <stop offset="100%" stop-color="#4a1da8"/>
+                            </radialGradient>
+                            <filter id="hGlow" x="-30%" y="-30%" width="160%" height="160%">
+                                <feGaussianBlur stdDeviation="4" result="blur"/>
+                                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                            </filter>
+                            <filter id="hEyeBloom" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="3" result="glow"/>
+                                <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+                            </filter>
+                        </defs>
+
+                        <!-- Outer Backlight Aura -->
+                        <circle cx="80" cy="85" r="72" fill="url(#hAura)"/>
+
+                        <!-- Antenna Stem & Beacon -->
+                        <path d="M80 34 V18" stroke="#4e2c88" stroke-width="4.5" stroke-linecap="round"/>
+                        <circle cx="80" cy="14" r="7.5" fill="url(#hBeacon)" filter="url(#hGlow)"/>
+                        <circle cx="78" cy="12" r="2.2" fill="#ffffff" opacity="0.85"/>
+
+                        <!-- Left Ear Pod -->
+                        <rect x="14" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                        <ellipse cx="21" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+
+                        <!-- Right Ear Pod -->
+                        <rect x="132" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                        <ellipse cx="139" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+
+                        <!-- Main Helmet Shell -->
+                        <rect x="23" y="32" width="114" height="96" rx="46" fill="url(#hShell)" stroke="#7e49e6" stroke-width="2.2" filter="url(#hGlow)"/>
+
+                        <!-- Inner Visor Frame & Glass Face -->
+                        <rect x="33" y="45" width="94" height="72" rx="34" fill="url(#hVisor)" stroke="rgba(140, 85, 250, 0.45)" stroke-width="1.5"/>
+
+                        <!-- Glowing Pill Eyes -->
+                        <rect x="53" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                        <rect x="56" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+
+                        <rect x="95" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                        <rect x="98" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+                    </svg>
+                </div>
+                <h1 class="brand-title">PulseBot</h1>
+                <p class="brand-subtitle">Welcome back</p>
+            </div>
+
+            <!-- Error Banner -->
+            <div class="auth-error" id="authError"></div>
+
+            <!-- Log In Form -->
+            <form action="/user/login" method="post" id="loginForm" class="auth-form">
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" name="email" class="form-input" placeholder="example@gmail.com" required autocomplete="email">
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Password" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+                            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="auth-btn-submit" id="submitBtn">
+                    <span>Log In</span>
+                </button>
+            </form>
+
+            <!-- Card Footer -->
+            <p class="auth-footer">
+                Don't have an account? <a href="/signup" class="auth-link">Sign Up</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Client-side Interactive Polish -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('loginForm');
+            var errorBanner = document.getElementById('authError');
+            var submitBtn = document.getElementById('submitBtn');
+            var passwordInput = document.getElementById('password');
+            var togglePasswordBtn = document.getElementById('togglePassword');
+
+            // Password Toggle
+            if (togglePasswordBtn && passwordInput) {
+                togglePasswordBtn.addEventListener('click', function () {
+                    var isPassword = passwordInput.type === 'password';
+                    passwordInput.type = isPassword ? 'text' : 'password';
+                    togglePasswordBtn.innerHTML = isPassword
+                        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>'
+                        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+                });
+            }
+
+            function showError(msg) {
+                errorBanner.textContent = msg;
+                errorBanner.style.display = 'block';
+            }
+
+            function clearError() {
+                errorBanner.textContent = '';
+                errorBanner.style.display = 'none';
+            }
+
+            // AJAX Form Submission with Instant Error Feedback
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                clearError();
+
+                var emailVal = form.email.value.trim();
+                var passwordVal = form.password.value;
+
+                if (!emailVal || !passwordVal) {
+                    showError('Please enter both email and password.');
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Logging In...</span>';
+
+                fetch('/user/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: emailVal,
+                        password: passwordVal
+                    })
+                })
+                .then(function (res) {
+                    if (res.redirected) {
+                        window.location.href = res.url;
+                        return;
+                    }
+                    if (res.ok) {
+                        window.location.href = '/homepage';
+                        return;
+                    }
+                    return res.json().then(function (data) {
+                        showError(data.error || data.msg || 'Invalid credentials. Please try again.');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<span>Log In</span>';
+                    });
+                })
+                .catch(function () {
+                    // Fallback to native form submission if needed
+                    form.submit();
+                });
+            });
+        });
+    </script>
+</body>
 </html>

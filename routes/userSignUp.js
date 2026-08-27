@@ -75,7 +75,7 @@ router.get("/logout", (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
         sameSite: "lax",
-        secure: false
+        secure: process.env.NODE_ENV === "production"
     });
 
     return res.redirect("/login");

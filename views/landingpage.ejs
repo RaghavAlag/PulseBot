@@ -2,13 +2,222 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PulseBot</title>
+    <!-- Google Fonts for Oswald condensed display typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/landing.css">
 </head>
 <body>
-    <h1>Landing Page</h1>
-    <button id="signUpbtn">Sign Up</button>
-    <button id="logInbtn">Login</button>
-    <script src="landingpage.js"></script>
+    <div class="landing-container" id="landingContainer">
+        <!-- Master Scene Wrapper (1834x858 wide coordinate system) -->
+        <div class="scene-wrapper" id="sceneWrapper">
+            <img src="/assets/landing-wide.png" class="scene-image" alt="PulseBot Scene">
+            
+            <!-- 1. Ambient lighting from main monitor -->
+            <div class="monitor-light-spill"></div>
+            
+            <!-- 2. Left Monitor Video (strictly clipped to physical monitor screen) -->
+            <div class="second-monitor-overlay">
+                <video src="/assets/ambient-driving.mp4" autoplay loop muted playsinline></video>
+            </div>
+            
+            <!-- 3. Main Monitor Hotspot & Glow -->
+            <div class="main-monitor-hotspot" id="mainMonitor">
+                <div class="monitor-glow"></div>
+                <div class="monitor-screen-display" id="monitorScreenDisplay">
+                    <div class="access-denied-content">
+                        <span class="access-denied-text">ACCESS DENIED</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 4. Live Clock (physically covers the digital display with matching perspective) -->
+            <div class="clock-overlay">
+                <span class="clock-time" id="liveClock">10:30</span>
+            </div>
+        </div>
+        
+        <!-- Transition Layer -->
+        <div class="zoom-darkness" id="zoomDarkness"></div>
+        
+        <!-- Cinematic PulseBot Reveal World -->
+        <div class="pulsebot-reveal" id="pulsebotReveal">
+            <!-- Environmental Background Elements -->
+            <div class="reveal-bg">
+                <!-- Cosmic Stardust Canvas -->
+                <div class="stars-canvas"></div>
+
+                <!-- Faint Giant Background Watermark Typography -->
+                <div class="bg-watermark" aria-hidden="true">PULSEBOT</div>
+                
+                <!-- Central Atmosphere Halo & Concentric Energy Aura -->
+                <div class="center-aura"></div>
+                <div class="bg-pulse-ring ring-1"></div>
+                <div class="bg-pulse-ring ring-2"></div>
+                <div class="bg-pulse-ring ring-3"></div>
+
+                <!-- Floating Ambient Particles -->
+                <div class="bg-particles">
+                    <span class="particle p-1"></span>
+                    <span class="particle p-2"></span>
+                    <span class="particle p-3"></span>
+                    <span class="particle p-4"></span>
+                    <span class="particle p-5"></span>
+                    <span class="particle p-6"></span>
+                    <span class="particle p-7"></span>
+                    <span class="particle p-8"></span>
+                </div>
+
+            </div>
+
+            <!-- Central Content Hierarchy Card (Dominant Focus) -->
+            <div class="reveal-content">
+                <!-- 3D-Shaded Floating Robot Mascot -->
+                <div class="brand-robot-mark">
+                    <svg class="robot-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="hAura" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#a068ff" stop-opacity="0.65"/>
+                                <stop offset="60%" stop-color="#5a24bf" stop-opacity="0.25"/>
+                                <stop offset="100%" stop-color="#080318" stop-opacity="0"/>
+                            </radialGradient>
+                            <radialGradient id="hShell" cx="40%" cy="28%" r="72%">
+                                <stop offset="0%" stop-color="#432678"/>
+                                <stop offset="45%" stop-color="#1f1340"/>
+                                <stop offset="85%" stop-color="#0f0822"/>
+                                <stop offset="100%" stop-color="#060210"/>
+                            </radialGradient>
+                            <radialGradient id="hVisor" cx="50%" cy="35%" r="65%">
+                                <stop offset="0%" stop-color="#1b1233"/>
+                                <stop offset="60%" stop-color="#0b0618"/>
+                                <stop offset="100%" stop-color="#030108"/>
+                            </radialGradient>
+                            <radialGradient id="hEye" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="35%" stop-color="#e8ddff"/>
+                                <stop offset="70%" stop-color="#a072ff"/>
+                                <stop offset="100%" stop-color="#652cd4"/>
+                            </radialGradient>
+                            <linearGradient id="hEar" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#412473"/>
+                                <stop offset="50%" stop-color="#1b0f36"/>
+                                <stop offset="100%" stop-color="#0a0518"/>
+                            </linearGradient>
+                            <radialGradient id="hBeacon" cx="35%" cy="35%" r="65%">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="50%" stop-color="#cfbaff"/>
+                                <stop offset="85%" stop-color="#8855ff"/>
+                                <stop offset="100%" stop-color="#4a1da8"/>
+                            </radialGradient>
+                            <filter id="hGlow" x="-30%" y="-30%" width="160%" height="160%">
+                                <feGaussianBlur stdDeviation="4.5" result="blur"/>
+                                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                            </filter>
+                            <filter id="hEyeBloom" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="3.5" result="glow"/>
+                                <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+                            </filter>
+                        </defs>
+
+                        <!-- Outer Backlight Aura -->
+                        <circle cx="80" cy="85" r="72" fill="url(#hAura)"/>
+
+                        <!-- Antenna Stem & Beacon -->
+                        <path d="M80 34 V18" stroke="#4e2c88" stroke-width="4.5" stroke-linecap="round"/>
+                        <circle cx="80" cy="14" r="7.5" fill="url(#hBeacon)" filter="url(#hGlow)"/>
+                        <circle cx="78" cy="12" r="2.2" fill="#ffffff" opacity="0.85"/>
+
+                        <!-- Left Ear Pod -->
+                        <rect x="14" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                        <ellipse cx="21" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+
+                        <!-- Right Ear Pod -->
+                        <rect x="132" y="66" width="14" height="34" rx="7" fill="url(#hEar)" stroke="#7444d6" stroke-width="1.8" filter="url(#hGlow)"/>
+                        <ellipse cx="139" cy="83" rx="3.5" ry="9" fill="#120926" stroke="#9a6af8" stroke-width="1"/>
+
+                        <!-- Main Helmet Shell -->
+                        <rect x="23" y="32" width="114" height="96" rx="46" fill="url(#hShell)" stroke="#7e49e6" stroke-width="2.2" filter="url(#hGlow)"/>
+
+                        <!-- Top Specular Highlight -->
+                        <path d="M45 42 C60 36 100 36 115 42" stroke="rgba(215, 195, 255, 0.45)" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+                        <!-- Inner Visor Frame & Glass Face -->
+                        <rect x="33" y="45" width="94" height="72" rx="34" fill="url(#hVisor)" stroke="rgba(140, 85, 250, 0.45)" stroke-width="1.5"/>
+
+                        <!-- Visor Glass Reflection Arc -->
+                        <path d="M44 54 C60 48 100 48 116 54" stroke="rgba(255, 255, 255, 0.25)" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+                        <!-- Glowing Pill Eyes -->
+                        <rect x="53" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                        <rect x="56" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+
+                        <rect x="95" y="65" width="12" height="24" rx="6" fill="url(#hEye)" filter="url(#hEyeBloom)"/>
+                        <rect x="98" y="68" width="4" height="9" rx="2" fill="#ffffff" opacity="0.9"/>
+
+                        <!-- Cheek Accent Glows -->
+                        <ellipse cx="48" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)"/>
+                        <ellipse cx="112" cy="94" rx="6" ry="2.5" fill="rgba(155, 105, 255, 0.3)"/>
+                    </svg>
+                </div>
+
+                <!-- Prominent Brand Title (PulseBot) -->
+                <div class="brand-container">
+                    <h1 class="brand-title">PulseBot</h1>
+                </div>
+
+                <!-- Minimal Pulse Waveform Separator Line -->
+                <div class="pulse-separator">
+                    <svg class="pulse-wave-svg" viewBox="0 0 240 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="pLineGrad" x1="0" y1="0" x2="240" y2="0" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="rgba(130, 80, 235, 0)"/>
+                                <stop offset="25%" stop-color="rgba(150, 100, 255, 0.35)"/>
+                                <stop offset="45%" stop-color="#b68eff"/>
+                                <stop offset="50%" stop-color="#ffffff"/>
+                                <stop offset="55%" stop-color="#b68eff"/>
+                                <stop offset="75%" stop-color="rgba(150, 100, 255, 0.35)"/>
+                                <stop offset="100%" stop-color="rgba(130, 80, 235, 0)"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M0 9 H95 L102 3 L108 15 L114 1 L120 17 L126 5 L132 13 L138 9 H240" stroke="url(#pLineGrad)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <!-- Clean Wide-Tracked Tagline -->
+                <p class="brand-tagline">YOUR AI COMPANION</p>
+
+                <!-- Auth Action Buttons (Pill Capsules with Arrows) -->
+                <div class="auth-buttons">
+                    <a href="/login" class="auth-btn primary">
+                        <span>LOG IN</span>
+                        <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="/signup" class="auth-btn secondary">
+                        <span>SIGN UP</span>
+                        <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Subtle Lower Security Detail -->
+                <div class="reveal-footer-detail">
+                    <svg class="lock-icon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2.5" y="6" width="9" height="6.5" rx="1.8" stroke="#726494" stroke-width="1.2"/>
+                        <path d="M4.5 6V4C4.5 2.62 5.62 1.5 7 1.5C8.38 1.5 9.5 2.62 9.5 4V6" stroke="#726494" stroke-width="1.2" stroke-linecap="round"/>
+                        <circle cx="7" cy="9.2" r="0.9" fill="#726494"/>
+                    </svg>
+                    <span class="detail-text">SECURE. PRIVATE. BUILT FOR YOU.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/landingpage.js"></script>
 </body>
 </html>

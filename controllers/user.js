@@ -28,6 +28,15 @@ async function handleCreatingUser(req, res) {
             });
         }
 
+        const normalizedEmail = email.trim().toLowerCase();
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(normalizedEmail) || normalizedEmail.includes("..") || normalizedEmail.length > 254) {
+            return res.status(400).json({
+                error: "Please enter a valid email address"
+            });
+        }
+
         if (
             password.length < 6 ||
             password.length > 100
@@ -38,7 +47,7 @@ async function handleCreatingUser(req, res) {
         }
 
         const existingUser = await User.findOne({
-            email: email.trim()
+            email: normalizedEmail
         });
 
         if (existingUser) {
@@ -54,7 +63,7 @@ async function handleCreatingUser(req, res) {
 
         await User.create({
             name: name.trim(),
-            email: email.trim(),
+            email: normalizedEmail,
             password: hashedPassword
         });
 
@@ -92,8 +101,10 @@ async function handleLoginUser(req, res) {
         });
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
+
     const user = await User.findOne({
-        email: email.trim()
+        email: normalizedEmail
     });
     if (!user) {
         return res.status(404).json({ msg: "Invalid Credentials" })
@@ -115,7 +126,7 @@ async function handleLoginUser(req, res) {
     res.cookie("token", token, {
         httpOnly: true,
         sameSite: "lax",
-        secure: false
+        secure: process.env.NODE_ENV === "production"
     });
 
     return res.redirect("/homepage");
@@ -293,7 +304,7 @@ async function handleDeleteAccount(req, res) {
         res.clearCookie("token", {
             httpOnly: true,
             sameSite: "lax",
-            secure: false
+            secure: process.env.NODE_ENV === "production"
         });
 
         return res.json({
